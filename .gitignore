@@ -1,4 +1,5 @@
-odds-tracker/
+odds-tracker/ 
 config.py
 gcp_creds.json
 *__pycache__*
+.pytest_cache/

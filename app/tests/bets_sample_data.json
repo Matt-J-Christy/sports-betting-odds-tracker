@@ -1,0 +1,2368 @@
+{
+    "get": "odds",
+    "parameters": {
+        "game": "7606",
+        "bookmaker": "4"
+    },
+    "errors": [],
+    "results": 1,
+    "response": [
+        {
+            "game": {
+                "id": 7606
+            },
+            "league": {
+                "id": 1,
+                "name": "NFL",
+                "season": 2023,
+                "logo": "https: //media-4.api-sports.io/american-football/leagues/1.png"
+            },
+            "country": {
+                "name": "USA",
+                "code": "US",
+                "flag": "https://media-4.api-sports.io/flags/us.svg"
+            },
+            "update": "2023-10-09T00:00:23+00:00",
+            "bookmakers": [
+                {
+                    "id": 4,
+                    "name": "Bet365",
+                    "bets": [
+                        {
+                            "id": 55,
+                            "name": "3Way Result",
+                            "values": [
+                                {
+                                    "value": "Home",
+                                    "odd": "1.56"
+                                },
+                                {
+                                    "value": "Draw",
+                                    "odd": "51.00"
+                                },
+                                {
+                                    "value": "Away",
+                                    "odd": "2.60"
+                                }
+                            ]
+                        },
+                        {
+                            "id": 1,
+                            "name": "Home/Away",
+                            "values": [
+                                {
+                                    "value": "Home",
+                                    "odd": "1.56"
+                                },
+                                {
+                                    "value": "Away",
+                                    "odd": "2.60"
+                                }
+                            ]
+                        },
+                        {
+                            "id": 2,
+                            "name": "Asian Handicap",
+                            "values": [
+                                {
+                                    "value": "Home -1",
+                                    "odd": "1.57"
+                                },
+                                {
+                                    "value": "Away -1",
+                                    "odd": "2.30"
+                                },
+                                {
+                                    "value": "Home +1",
+                                    "odd": "1.50"
+                                },
+                                {
+                                    "value": "Away +1",
+                                    "odd": "2.65"
+                                },
+                                {
+                                    "value": "Home -1.5",
+                                    "odd": "1.60"
+                                },
+                                {
+                                    "value": "Away -1.5",
+                                    "odd": "2.25"
+                                },
+                                {
+                                    "value": "Home +1.5",
+                                    "odd": "1.49"
+                                },
+                                {
+                                    "value": "Away +1.5",
+                                    "odd": "2.70"
+                                },
+                                {
+                                    "value": "Home +2",
+                                    "odd": "1.48"
+                                },
+                                {
+                                    "value": "Away +2",
+                                    "odd": "2.75"
+                                },
+                                {
+                                    "value": "Home -2",
+                                    "odd": "1.62"
+                                },
+                                {
+                                    "value": "Away -2",
+                                    "odd": "2.20"
+                                },
+                                {
+                                    "value": "Home -3",
+                                    "odd": "1.77"
+                                },
+                                {
+                                    "value": "Away -3",
+                                    "odd": "1.95"
+                                },
+                                {
+                                    "value": "Home +3",
+                                    "odd": "1.36"
+                                },
+                                {
+                                    "value": "Away +3",
+                                    "odd": "3.10"
+                                },
+                                {
+                                    "value": "Home +2.5",
+                                    "odd": "1.44"
+                                },
+                                {
+                                    "value": "Away +2.5",
+                                    "odd": "2.80"
+                                },
+                                {
+                                    "value": "Home -2.5",
+                                    "odd": "1.67"
+                                },
+                                {
+                                    "value": "Away -2.5",
+                                    "odd": "2.10"
+                                },
+                                {
+                                    "value": "Home -4",
+                                    "odd": "2.05"
+                                },
+                                {
+                                    "value": "Away -4",
+                                    "odd": "1.73"
+                                },
+                                {
+                                    "value": "Home -4.5",
+                                    "odd": "2.10"
+                                },
+                                {
+                                    "value": "Away -4.5",
+                                    "odd": "1.71"
+                                },
+                                {
+                                    "value": "Home -3.5",
+                                    "odd": "1.95"
+                                },
+                                {
+                                    "value": "Away -3.5",
+                                    "odd": "1.87"
+                                },
+                                {
+                                    "value": "Home -5",
+                                    "odd": "2.15"
+                                },
+                                {
+                                    "value": "Away -5",
+                                    "odd": "1.69"
+                                },
+                                {
+                                    "value": "Home +3.5",
+                                    "odd": "1.31"
+                                },
+                                {
+                                    "value": "Away +3.5",
+                                    "odd": "3.30"
+                                },
+                                {
+                                    "value": "Home +4",
+                                    "odd": "1.29"
+                                },
+                                {
+                                    "value": "Away +4",
+                                    "odd": "3.50"
+                                },
+                                {
+                                    "value": "Home +4.5",
+                                    "odd": "1.28"
+                                },
+                                {
+                                    "value": "Away +4.5",
+                                    "odd": "3.55"
+                                },
+                                {
+                                    "value": "Home -5.5",
+                                    "odd": "2.20"
+                                },
+                                {
+                                    "value": "Away -5.5",
+                                    "odd": "1.67"
+                                },
+                                {
+                                    "value": "Home -9.5",
+                                    "odd": "3.10"
+                                },
+                                {
+                                    "value": "Away -9.5",
+                                    "odd": "1.36"
+                                },
+                                {
+                                    "value": "Home -7.5",
+                                    "odd": "2.75"
+                                },
+                                {
+                                    "value": "Away -7.5",
+                                    "odd": "1.40"
+                                },
+                                {
+                                    "value": "Home -8.5",
+                                    "odd": "2.90"
+                                },
+                                {
+                                    "value": "Away -8.5",
+                                    "odd": "1.37"
+                                },
+                                {
+                                    "value": "Home -10",
+                                    "odd": "3.40"
+                                },
+                                {
+                                    "value": "Away -10",
+                                    "odd": "1.30"
+                                },
+                                {
+                                    "value": "Home -6",
+                                    "odd": "2.25"
+                                },
+                                {
+                                    "value": "Away -6",
+                                    "odd": "1.57"
+                                },
+                                {
+                                    "value": "Home -7",
+                                    "odd": "2.63"
+                                },
+                                {
+                                    "value": "Away -7",
+                                    "odd": "1.44"
+                                },
+                                {
+                                    "value": "Home -8",
+                                    "odd": "2.80"
+                                },
+                                {
+                                    "value": "Away -8",
+                                    "odd": "1.38"
+                                },
+                                {
+                                    "value": "Home -9",
+                                    "odd": "3.00"
+                                },
+                                {
+                                    "value": "Away -9",
+                                    "odd": "1.36"
+                                },
+                                {
+                                    "value": "Home -10.5",
+                                    "odd": "3.45"
+                                },
+                                {
+                                    "value": "Away -10.5",
+                                    "odd": "1.29"
+                                },
+                                {
+                                    "value": "Home -6.5",
+                                    "odd": "2.40"
+                                },
+                                {
+                                    "value": "Away -6.5",
+                                    "odd": "1.53"
+                                },
+                                {
+                                    "value": "Home -11",
+                                    "odd": "3.60"
+                                },
+                                {
+                                    "value": "Away -11",
+                                    "odd": "1.27"
+                                },
+                                {
+                                    "value": "Home -11.5",
+                                    "odd": "3.70"
+                                },
+                                {
+                                    "value": "Away -11.5",
+                                    "odd": "1.25"
+                                },
+                                {
+                                    "value": "Home -12",
+                                    "odd": "3.75"
+                                },
+                                {
+                                    "value": "Away -12",
+                                    "odd": "1.24"
+                                },
+                                {
+                                    "value": "Home -12.5",
+                                    "odd": "3.80"
+                                },
+                                {
+                                    "value": "Away -12.5",
+                                    "odd": "1.24"
+                                },
+                                {
+                                    "value": "Home +5.5",
+                                    "odd": "1.25"
+                                },
+                                {
+                                    "value": "Away +5.5",
+                                    "odd": "3.75"
+                                },
+                                {
+                                    "value": "Home +5",
+                                    "odd": "1.27"
+                                },
+                                {
+                                    "value": "Away +5",
+                                    "odd": "3.60"
+                                },
+                                {
+                                    "value": "Home -13",
+                                    "odd": "4.20"
+                                },
+                                {
+                                    "value": "Away -13",
+                                    "odd": "1.21"
+                                },
+                                {
+                                    "value": "Home -13.5",
+                                    "odd": "4.33"
+                                },
+                                {
+                                    "value": "Away -13.5",
+                                    "odd": "1.20"
+                                },
+                                {
+                                    "value": "Home +6.5",
+                                    "odd": "1.20"
+                                },
+                                {
+                                    "value": "Away +6.5",
+                                    "odd": "4.33"
+                                },
+                                {
+                                    "value": "Home +8.5",
+                                    "odd": "1.13"
+                                },
+                                {
+                                    "value": "Away +8.5",
+                                    "odd": "5.75"
+                                },
+                                {
+                                    "value": "Home +7.5",
+                                    "odd": "1.15"
+                                },
+                                {
+                                    "value": "Away +7.5",
+                                    "odd": "5.25"
+                                },
+                                {
+                                    "value": "Home +10",
+                                    "odd": "1.11"
+                                },
+                                {
+                                    "value": "Away +10",
+                                    "odd": "6.75"
+                                },
+                                {
+                                    "value": "Home +6",
+                                    "odd": "1.21"
+                                },
+                                {
+                                    "value": "Away +6",
+                                    "odd": "4.20"
+                                },
+                                {
+                                    "value": "Home +7",
+                                    "odd": "1.17"
+                                },
+                                {
+                                    "value": "Away +7",
+                                    "odd": "5.00"
+                                },
+                                {
+                                    "value": "Home +8",
+                                    "odd": "1.14"
+                                },
+                                {
+                                    "value": "Away +8",
+                                    "odd": "5.50"
+                                },
+                                {
+                                    "value": "Home +9",
+                                    "odd": "1.13"
+                                },
+                                {
+                                    "value": "Away +9",
+                                    "odd": "6.00"
+                                },
+                                {
+                                    "value": "Home +9.5",
+                                    "odd": "1.11"
+                                },
+                                {
+                                    "value": "Away +9.5",
+                                    "odd": "6.40"
+                                },
+                                {
+                                    "value": "Home -14.5",
+                                    "odd": "5.00"
+                                },
+                                {
+                                    "value": "Away -14.5",
+                                    "odd": "1.17"
+                                },
+                                {
+                                    "value": "Home -15.5",
+                                    "odd": "5.25"
+                                },
+                                {
+                                    "value": "Away -15.5",
+                                    "odd": "1.15"
+                                },
+                                {
+                                    "value": "Home -14",
+                                    "odd": "4.75"
+                                },
+                                {
+                                    "value": "Away -14",
+                                    "odd": "1.17"
+                                },
+                                {
+                                    "value": "Home -15",
+                                    "odd": "5.15"
+                                },
+                                {
+                                    "value": "Away -15",
+                                    "odd": "1.16"
+                                },
+                                {
+                                    "value": "Home -16",
+                                    "odd": "5.40"
+                                },
+                                {
+                                    "value": "Away -16",
+                                    "odd": "1.15"
+                                },
+                                {
+                                    "value": "Home -16.5",
+                                    "odd": "5.50"
+                                },
+                                {
+                                    "value": "Away -16.5",
+                                    "odd": "1.14"
+                                },
+                                {
+                                    "value": "Home +11.5",
+                                    "odd": "1.09"
+                                },
+                                {
+                                    "value": "Away +11.5",
+                                    "odd": "7.75"
+                                },
+                                {
+                                    "value": "Home +10.5",
+                                    "odd": "1.10"
+                                },
+                                {
+                                    "value": "Away +10.5",
+                                    "odd": "7.00"
+                                },
+                                {
+                                    "value": "Home +12.5",
+                                    "odd": "1.08"
+                                },
+                                {
+                                    "value": "Away +12.5",
+                                    "odd": "8.50"
+                                },
+                                {
+                                    "value": "Home +11",
+                                    "odd": "1.09"
+                                },
+                                {
+                                    "value": "Away +11",
+                                    "odd": "7.50"
+                                },
+                                {
+                                    "value": "Home +12",
+                                    "odd": "1.08"
+                                },
+                                {
+                                    "value": "Away +12",
+                                    "odd": "8.00"
+                                },
+                                {
+                                    "value": "Home +13",
+                                    "odd": "1.07"
+                                },
+                                {
+                                    "value": "Away +13",
+                                    "odd": "9.00"
+                                },
+                                {
+                                    "value": "Home +14",
+                                    "odd": "1.06"
+                                },
+                                {
+                                    "value": "Away +14",
+                                    "odd": "10.50"
+                                },
+                                {
+                                    "value": "Home +13.5",
+                                    "odd": "1.07"
+                                },
+                                {
+                                    "value": "Away +13.5",
+                                    "odd": "9.50"
+                                },
+                                {
+                                    "value": "Home +14.5",
+                                    "odd": "1.05"
+                                },
+                                {
+                                    "value": "Away +14.5",
+                                    "odd": "10.75"
+                                },
+                                {
+                                    "value": "Home -17",
+                                    "odd": "6.25"
+                                },
+                                {
+                                    "value": "Away -17",
+                                    "odd": "1.12"
+                                },
+                                {
+                                    "value": "Home -18",
+                                    "odd": "6.75"
+                                },
+                                {
+                                    "value": "Away -18",
+                                    "odd": "1.11"
+                                },
+                                {
+                                    "value": "Home -19",
+                                    "odd": "7.25"
+                                },
+                                {
+                                    "value": "Away -19",
+                                    "odd": "1.10"
+                                },
+                                {
+                                    "value": "Home -17.5",
+                                    "odd": "6.50"
+                                },
+                                {
+                                    "value": "Away -17.5",
+                                    "odd": "1.11"
+                                },
+                                {
+                                    "value": "Home -18.5",
+                                    "odd": "7.00"
+                                },
+                                {
+                                    "value": "Away -18.5",
+                                    "odd": "1.10"
+                                },
+                                {
+                                    "value": "Home -19.5",
+                                    "odd": "7.50"
+                                },
+                                {
+                                    "value": "Away -19.5",
+                                    "odd": "1.09"
+                                },
+                                {
+                                    "value": "Home -23.5",
+                                    "odd": "11.50"
+                                },
+                                {
+                                    "value": "Away -23.5",
+                                    "odd": "1.05"
+                                },
+                                {
+                                    "value": "Home -20.5",
+                                    "odd": "8.50"
+                                },
+                                {
+                                    "value": "Away -20.5",
+                                    "odd": "1.08"
+                                },
+                                {
+                                    "value": "Home -20",
+                                    "odd": "8.00"
+                                },
+                                {
+                                    "value": "Away -20",
+                                    "odd": "1.08"
+                                },
+                                {
+                                    "value": "Home -21",
+                                    "odd": "9.25"
+                                },
+                                {
+                                    "value": "Away -21",
+                                    "odd": "1.07"
+                                },
+                                {
+                                    "value": "Home -22",
+                                    "odd": "10.25"
+                                },
+                                {
+                                    "value": "Away -22",
+                                    "odd": "1.06"
+                                },
+                                {
+                                    "value": "Home -23",
+                                    "odd": "11.00"
+                                },
+                                {
+                                    "value": "Away -23",
+                                    "odd": "1.05"
+                                },
+                                {
+                                    "value": "Home -21.5",
+                                    "odd": "10.00"
+                                },
+                                {
+                                    "value": "Away -21.5",
+                                    "odd": "1.06"
+                                },
+                                {
+                                    "value": "Home -22.5",
+                                    "odd": "10.50"
+                                },
+                                {
+                                    "value": "Away -22.5",
+                                    "odd": "1.06"
+                                },
+                                {
+                                    "value": "Home +15",
+                                    "odd": "1.05"
+                                },
+                                {
+                                    "value": "Away +15",
+                                    "odd": "11.00"
+                                },
+                                {
+                                    "value": "Home +16",
+                                    "odd": "1.05"
+                                },
+                                {
+                                    "value": "Away +16",
+                                    "odd": "12.00"
+                                },
+                                {
+                                    "value": "Home +17",
+                                    "odd": "1.03"
+                                },
+                                {
+                                    "value": "Away +17",
+                                    "odd": "14.00"
+                                },
+                                {
+                                    "value": "Home +15.5",
+                                    "odd": "1.05"
+                                },
+                                {
+                                    "value": "Away +15.5",
+                                    "odd": "11.50"
+                                },
+                                {
+                                    "value": "Home +16.5",
+                                    "odd": "1.04"
+                                },
+                                {
+                                    "value": "Away +16.5",
+                                    "odd": "12.50"
+                                }
+                            ]
+                        },
+                        {
+                            "id": 3,
+                            "name": "Over/Under",
+                            "values": [
+                                {
+                                    "value": "Over 37.5",
+                                    "odd": "1.31"
+                                },
+                                {
+                                    "value": "Under 37.5",
+                                    "odd": "3.30"
+                                },
+                                {
+                                    "value": "Over 38.5",
+                                    "odd": "1.36"
+                                },
+                                {
+                                    "value": "Under 38.5",
+                                    "odd": "3.10"
+                                },
+                                {
+                                    "value": "Over 39.5",
+                                    "odd": "1.38"
+                                },
+                                {
+                                    "value": "Under 39.5",
+                                    "odd": "2.80"
+                                },
+                                {
+                                    "value": "Over 35.5",
+                                    "odd": "1.21"
+                                },
+                                {
+                                    "value": "Under 35.5",
+                                    "odd": "4.20"
+                                },
+                                {
+                                    "value": "Over 36.5",
+                                    "odd": "1.24"
+                                },
+                                {
+                                    "value": "Under 36.5",
+                                    "odd": "3.80"
+                                },
+                                {
+                                    "value": "Over 41.5",
+                                    "odd": "1.56"
+                                },
+                                {
+                                    "value": "Under 41.5",
+                                    "odd": "2.30"
+                                },
+                                {
+                                    "value": "Over 43.5",
+                                    "odd": "1.69"
+                                },
+                                {
+                                    "value": "Under 43.5",
+                                    "odd": "2.05"
+                                },
+                                {
+                                    "value": "Over 42.5",
+                                    "odd": "1.59"
+                                },
+                                {
+                                    "value": "Under 42.5",
+                                    "odd": "2.20"
+                                },
+                                {
+                                    "value": "Over 50.5",
+                                    "odd": "2.65"
+                                },
+                                {
+                                    "value": "Under 50.5",
+                                    "odd": "1.43"
+                                },
+                                {
+                                    "value": "Over 51.5",
+                                    "odd": "3.00"
+                                },
+                                {
+                                    "value": "Under 51.5",
+                                    "odd": "1.36"
+                                },
+                                {
+                                    "value": "Over 52.5",
+                                    "odd": "3.25"
+                                },
+                                {
+                                    "value": "Under 52.5",
+                                    "odd": "1.33"
+                                },
+                                {
+                                    "value": "Over 55.5",
+                                    "odd": "4.10"
+                                },
+                                {
+                                    "value": "Under 55.5",
+                                    "odd": "1.22"
+                                },
+                                {
+                                    "value": "Over 53.5",
+                                    "odd": "3.40"
+                                },
+                                {
+                                    "value": "Under 53.5",
+                                    "odd": "1.30"
+                                },
+                                {
+                                    "value": "Over 58.5",
+                                    "odd": "5.50"
+                                },
+                                {
+                                    "value": "Under 58.5",
+                                    "odd": "1.15"
+                                },
+                                {
+                                    "value": "Over 54.5",
+                                    "odd": "3.75"
+                                },
+                                {
+                                    "value": "Under 54.5",
+                                    "odd": "1.25"
+                                },
+                                {
+                                    "value": "Over 57.5",
+                                    "odd": "4.75"
+                                },
+                                {
+                                    "value": "Under 57.5",
+                                    "odd": "1.17"
+                                },
+                                {
+                                    "value": "Over 56.5",
+                                    "odd": "4.33"
+                                },
+                                {
+                                    "value": "Under 56.5",
+                                    "odd": "1.20"
+                                },
+                                {
+                                    "value": "Over 60.5",
+                                    "odd": "6.65"
+                                },
+                                {
+                                    "value": "Under 60.5",
+                                    "odd": "1.12"
+                                },
+                                {
+                                    "value": "Over 26.5",
+                                    "odd": "1.05"
+                                },
+                                {
+                                    "value": "Under 26.5",
+                                    "odd": "12.00"
+                                },
+                                {
+                                    "value": "Over 45.5",
+                                    "odd": "2.00"
+                                },
+                                {
+                                    "value": "Under 45.5",
+                                    "odd": "1.73"
+                                },
+                                {
+                                    "value": "Over 44.5",
+                                    "odd": "1.87"
+                                },
+                                {
+                                    "value": "Under 44.5",
+                                    "odd": "1.95"
+                                },
+                                {
+                                    "value": "Over 46.5",
+                                    "odd": "2.10"
+                                },
+                                {
+                                    "value": "Under 46.5",
+                                    "odd": "1.69"
+                                },
+                                {
+                                    "value": "Over 40.5",
+                                    "odd": "1.48"
+                                },
+                                {
+                                    "value": "Under 40.5",
+                                    "odd": "2.60"
+                                },
+                                {
+                                    "value": "Over 49.5",
+                                    "odd": "2.50"
+                                },
+                                {
+                                    "value": "Under 49.5",
+                                    "odd": "1.50"
+                                },
+                                {
+                                    "value": "Over 53",
+                                    "odd": "3.30"
+                                },
+                                {
+                                    "value": "Under 53",
+                                    "odd": "1.31"
+                                },
+                                {
+                                    "value": "Over 54",
+                                    "odd": "3.60"
+                                },
+                                {
+                                    "value": "Under 54",
+                                    "odd": "1.27"
+                                },
+                                {
+                                    "value": "Over 51",
+                                    "odd": "2.80"
+                                },
+                                {
+                                    "value": "Under 51",
+                                    "odd": "1.38"
+                                },
+                                {
+                                    "value": "Over 49",
+                                    "odd": "2.40"
+                                },
+                                {
+                                    "value": "Under 49",
+                                    "odd": "1.53"
+                                },
+                                {
+                                    "value": "Over 50",
+                                    "odd": "2.63"
+                                },
+                                {
+                                    "value": "Under 50",
+                                    "odd": "1.44"
+                                },
+                                {
+                                    "value": "Over 47",
+                                    "odd": "2.20"
+                                },
+                                {
+                                    "value": "Under 47",
+                                    "odd": "1.62"
+                                },
+                                {
+                                    "value": "Over 46",
+                                    "odd": "2.05"
+                                },
+                                {
+                                    "value": "Under 46",
+                                    "odd": "1.70"
+                                },
+                                {
+                                    "value": "Over 47.5",
+                                    "odd": "2.25"
+                                },
+                                {
+                                    "value": "Under 47.5",
+                                    "odd": "1.60"
+                                },
+                                {
+                                    "value": "Over 44",
+                                    "odd": "1.73"
+                                },
+                                {
+                                    "value": "Under 44",
+                                    "odd": "2.00"
+                                },
+                                {
+                                    "value": "Over 40",
+                                    "odd": "1.40"
+                                },
+                                {
+                                    "value": "Under 40",
+                                    "odd": "2.75"
+                                },
+                                {
+                                    "value": "Over 45",
+                                    "odd": "1.91"
+                                },
+                                {
+                                    "value": "Under 45",
+                                    "odd": "1.91"
+                                },
+                                {
+                                    "value": "Over 41",
+                                    "odd": "1.50"
+                                },
+                                {
+                                    "value": "Under 41",
+                                    "odd": "2.50"
+                                },
+                                {
+                                    "value": "Over 43",
+                                    "odd": "1.62"
+                                },
+                                {
+                                    "value": "Under 43",
+                                    "odd": "2.15"
+                                },
+                                {
+                                    "value": "Over 42",
+                                    "odd": "1.57"
+                                },
+                                {
+                                    "value": "Under 42",
+                                    "odd": "2.25"
+                                },
+                                {
+                                    "value": "Over 62.5",
+                                    "odd": "7.75"
+                                },
+                                {
+                                    "value": "Under 62.5",
+                                    "odd": "1.09"
+                                },
+                                {
+                                    "value": "Over 48.5",
+                                    "odd": "2.38"
+                                },
+                                {
+                                    "value": "Under 48.5",
+                                    "odd": "1.53"
+                                },
+                                {
+                                    "value": "Over 61.5",
+                                    "odd": "7.25"
+                                },
+                                {
+                                    "value": "Under 61.5",
+                                    "odd": "1.10"
+                                },
+                                {
+                                    "value": "Over 28.5",
+                                    "odd": "1.07"
+                                },
+                                {
+                                    "value": "Under 28.5",
+                                    "odd": "9.95"
+                                },
+                                {
+                                    "value": "Over 59.5",
+                                    "odd": "6.00"
+                                },
+                                {
+                                    "value": "Under 59.5",
+                                    "odd": "1.13"
+                                },
+                                {
+                                    "value": "Over 34.5",
+                                    "odd": "1.19"
+                                },
+                                {
+                                    "value": "Under 34.5",
+                                    "odd": "4.40"
+                                },
+                                {
+                                    "value": "Over 26",
+                                    "odd": "1.04"
+                                },
+                                {
+                                    "value": "Under 26",
+                                    "odd": "13.95"
+                                },
+                                {
+                                    "value": "Over 65.5",
+                                    "odd": "10.00"
+                                },
+                                {
+                                    "value": "Under 65.5",
+                                    "odd": "1.06"
+                                },
+                                {
+                                    "value": "Over 63.5",
+                                    "odd": "8.50"
+                                },
+                                {
+                                    "value": "Under 63.5",
+                                    "odd": "1.08"
+                                },
+                                {
+                                    "value": "Over 64",
+                                    "odd": "9.50"
+                                },
+                                {
+                                    "value": "Under 64",
+                                    "odd": "1.07"
+                                },
+                                {
+                                    "value": "Over 27",
+                                    "odd": "1.05"
+                                },
+                                {
+                                    "value": "Under 27",
+                                    "odd": "11.95"
+                                },
+                                {
+                                    "value": "Over 65",
+                                    "odd": "10.50"
+                                },
+                                {
+                                    "value": "Under 65",
+                                    "odd": "1.06"
+                                },
+                                {
+                                    "value": "Over 63",
+                                    "odd": "8.00"
+                                },
+                                {
+                                    "value": "Under 63",
+                                    "odd": "1.08"
+                                },
+                                {
+                                    "value": "Over 64.5",
+                                    "odd": "10.00"
+                                },
+                                {
+                                    "value": "Under 64.5",
+                                    "odd": "1.07"
+                                },
+                                {
+                                    "value": "Over 29.5",
+                                    "odd": "1.08"
+                                },
+                                {
+                                    "value": "Under 29.5",
+                                    "odd": "8.50"
+                                },
+                                {
+                                    "value": "Over 58",
+                                    "odd": "5.25"
+                                },
+                                {
+                                    "value": "Under 58",
+                                    "odd": "1.15"
+                                },
+                                {
+                                    "value": "Over 52",
+                                    "odd": "3.10"
+                                },
+                                {
+                                    "value": "Under 52",
+                                    "odd": "1.36"
+                                },
+                                {
+                                    "value": "Over 60",
+                                    "odd": "6.25"
+                                },
+                                {
+                                    "value": "Under 60",
+                                    "odd": "1.12"
+                                },
+                                {
+                                    "value": "Over 34",
+                                    "odd": "1.18"
+                                },
+                                {
+                                    "value": "Under 34",
+                                    "odd": "4.95"
+                                },
+                                {
+                                    "value": "Over 48",
+                                    "odd": "2.30"
+                                },
+                                {
+                                    "value": "Under 48",
+                                    "odd": "1.56"
+                                },
+                                {
+                                    "value": "Over 62",
+                                    "odd": "7.50"
+                                },
+                                {
+                                    "value": "Under 62",
+                                    "odd": "1.09"
+                                },
+                                {
+                                    "value": "Over 55",
+                                    "odd": "4.00"
+                                },
+                                {
+                                    "value": "Under 55",
+                                    "odd": "1.22"
+                                },
+                                {
+                                    "value": "Over 29",
+                                    "odd": "1.07"
+                                },
+                                {
+                                    "value": "Under 29",
+                                    "odd": "9.95"
+                                },
+                                {
+                                    "value": "Over 57",
+                                    "odd": "4.50"
+                                },
+                                {
+                                    "value": "Under 57",
+                                    "odd": "1.18"
+                                },
+                                {
+                                    "value": "Over 27.5",
+                                    "odd": "1.06"
+                                },
+                                {
+                                    "value": "Under 27.5",
+                                    "odd": "10.00"
+                                },
+                                {
+                                    "value": "Over 56",
+                                    "odd": "4.20"
+                                },
+                                {
+                                    "value": "Under 56",
+                                    "odd": "1.21"
+                                },
+                                {
+                                    "value": "Over 25.5",
+                                    "odd": "1.03"
+                                },
+                                {
+                                    "value": "Under 25.5",
+                                    "odd": "13.95"
+                                },
+                                {
+                                    "value": "Over 59",
+                                    "odd": "5.75"
+                                },
+                                {
+                                    "value": "Under 59",
+                                    "odd": "1.13"
+                                },
+                                {
+                                    "value": "Over 28",
+                                    "odd": "1.07"
+                                },
+                                {
+                                    "value": "Under 28",
+                                    "odd": "9.95"
+                                },
+                                {
+                                    "value": "Over 38",
+                                    "odd": "1.33"
+                                },
+                                {
+                                    "value": "Under 38",
+                                    "odd": "3.25"
+                                },
+                                {
+                                    "value": "Over 36",
+                                    "odd": "1.22"
+                                },
+                                {
+                                    "value": "Under 36",
+                                    "odd": "4.15"
+                                },
+                                {
+                                    "value": "Over 31.5",
+                                    "odd": "1.12"
+                                },
+                                {
+                                    "value": "Under 31.5",
+                                    "odd": "6.25"
+                                },
+                                {
+                                    "value": "Over 61",
+                                    "odd": "7.00"
+                                },
+                                {
+                                    "value": "Under 61",
+                                    "odd": "1.10"
+                                },
+                                {
+                                    "value": "Over 33.5",
+                                    "odd": "1.17"
+                                },
+                                {
+                                    "value": "Under 33.5",
+                                    "odd": "5.00"
+                                },
+                                {
+                                    "value": "Over 30.5",
+                                    "odd": "1.10"
+                                },
+                                {
+                                    "value": "Under 30.5",
+                                    "odd": "7.00"
+                                },
+                                {
+                                    "value": "Over 30",
+                                    "odd": "1.09"
+                                },
+                                {
+                                    "value": "Under 30",
+                                    "odd": "8.45"
+                                },
+                                {
+                                    "value": "Over 32.5",
+                                    "odd": "1.13"
+                                },
+                                {
+                                    "value": "Under 32.5",
+                                    "odd": "5.75"
+                                },
+                                {
+                                    "value": "Over 33",
+                                    "odd": "1.15"
+                                },
+                                {
+                                    "value": "Under 33",
+                                    "odd": "5.70"
+                                },
+                                {
+                                    "value": "Over 32",
+                                    "odd": "1.13"
+                                },
+                                {
+                                    "value": "Under 32",
+                                    "odd": "6.20"
+                                },
+                                {
+                                    "value": "Over 35",
+                                    "odd": "1.20"
+                                },
+                                {
+                                    "value": "Under 35",
+                                    "odd": "4.35"
+                                },
+                                {
+                                    "value": "Over 25",
+                                    "odd": "1.03"
+                                },
+                                {
+                                    "value": "Under 25",
+                                    "odd": "14.00"
+                                },
+                                {
+                                    "value": "Over 37",
+                                    "odd": "1.25"
+                                },
+                                {
+                                    "value": "Under 37",
+                                    "odd": "3.75"
+                                },
+                                {
+                                    "value": "Over 31",
+                                    "odd": "1.11"
+                                },
+                                {
+                                    "value": "Under 31",
+                                    "odd": "6.95"
+                                },
+                                {
+                                    "value": "Over 39",
+                                    "odd": "1.36"
+                                },
+                                {
+                                    "value": "Under 39",
+                                    "odd": "3.00"
+                                }
+                            ]
+                        },
+                        {
+                            "id": 4,
+                            "name": "Over/Under 1st Half",
+                            "values": [
+                                {
+                                    "value": "Over 22.5",
+                                    "odd": "1.91"
+                                },
+                                {
+                                    "value": "Under 22.5",
+                                    "odd": "1.91"
+                                },
+                                {
+                                    "value": "Over 22",
+                                    "odd": "1.91"
+                                },
+                                {
+                                    "value": "Under 22",
+                                    "odd": "1.91"
+                                }
+                            ]
+                        },
+                        {
+                            "id": 30,
+                            "name": "Over/Under 2nd Half",
+                            "values": [
+                                {
+                                    "value": "Over 22.5",
+                                    "odd": "1.91"
+                                },
+                                {
+                                    "value": "Under 22.5",
+                                    "odd": "1.91"
+                                }
+                            ]
+                        },
+                        {
+                            "id": 5,
+                            "name": "HT/FT Double",
+                            "values": [
+                                {
+                                    "value": "Draw/Draw",
+                                    "odd": "41.00"
+                                },
+                                {
+                                    "value": "Dallas Cowboys/Dallas Cowboys",
+                                    "odd": "3.60"
+                                },
+                                {
+                                    "value": "Dallas Cowboys/Draw",
+                                    "odd": "41.00"
+                                },
+                                {
+                                    "value": "Draw/Dallas Cowboys",
+                                    "odd": "19.00"
+                                },
+                                {
+                                    "value": "Draw/San Francisco 49ers",
+                                    "odd": "15.00"
+                                },
+                                {
+                                    "value": "San Francisco 49ers/Draw",
+                                    "odd": "36.00"
+                                },
+                                {
+                                    "value": "San Francisco 49ers/San Francisco 49ers",
+                                    "odd": "2.10"
+                                },
+                                {
+                                    "value": "San Francisco 49ers/Dallas Cowboys",
+                                    "odd": "8.50"
+                                },
+                                {
+                                    "value": "Dallas Cowboys/San Francisco 49ers",
+                                    "odd": "7.00"
+                                }
+                            ]
+                        },
+                        {
+                            "id": 6,
+                            "name": "Handicap Result",
+                            "values": [
+                                {
+                                    "value": "Home -3",
+                                    "odd": "1.95"
+                                },
+                                {
+                                    "value": "Draw -3",
+                                    "odd": "9.50"
+                                },
+                                {
+                                    "value": "Away -3",
+                                    "odd": "2.10"
+                                }
+                            ]
+                        },
+                        {
+                            "id": 8,
+                            "name": "Total - Home",
+                            "values": [
+                                {
+                                    "value": "Over 24.5",
+                                    "odd": "1.91"
+                                },
+                                {
+                                    "value": "Under 24.5",
+                                    "odd": "1.83"
+                                },
+                                {
+                                    "value": "Over 23.5",
+                                    "odd": "1.77"
+                                },
+                                {
+                                    "value": "Under 23.5",
+                                    "odd": "2.00"
+                                }
+                            ]
+                        },
+                        {
+                            "id": 9,
+                            "name": "Total - Away",
+                            "values": [
+                                {
+                                    "value": "Over 20.5",
+                                    "odd": "1.95"
+                                },
+                                {
+                                    "value": "Under 20.5",
+                                    "odd": "1.80"
+                                }
+                            ]
+                        },
+                        {
+                            "id": 11,
+                            "name": "Asian Handicap First Half",
+                            "values": [
+                                {
+                                    "value": "Home -2.5",
+                                    "odd": "1.87"
+                                },
+                                {
+                                    "value": "Away -2.5",
+                                    "odd": "1.95"
+                                }
+                            ]
+                        },
+                        {
+                            "id": 32,
+                            "name": "Asian Handicap 4th Qtr",
+                            "values": [
+                                {
+                                    "value": "Home -0.5",
+                                    "odd": "2.05"
+                                },
+                                {
+                                    "value": "Away -0.5",
+                                    "odd": "1.80"
+                                }
+                            ]
+                        },
+                        {
+                            "id": 12,
+                            "name": "Overtime",
+                            "values": [
+                                {
+                                    "value": "Yes",
+                                    "odd": "11.25"
+                                },
+                                {
+                                    "value": "No",
+                                    "odd": "1.06"
+                                }
+                            ]
+                        },
+                        {
+                            "id": 18,
+                            "name": "Home Winning Margin (14-Way)",
+                            "values": [
+                                {
+                                    "value": "Draw",
+                                    "odd": "51.00"
+                                },
+                                {
+                                    "value": "19-24",
+                                    "odd": "12.00"
+                                },
+                                {
+                                    "value": "13-18",
+                                    "odd": "7.00"
+                                },
+                                {
+                                    "value": "1-6",
+                                    "odd": "3.80"
+                                },
+                                {
+                                    "value": "37-42",
+                                    "odd": "67.00"
+                                },
+                                {
+                                    "value": "7-12",
+                                    "odd": "5.25"
+                                },
+                                {
+                                    "value": "25-30",
+                                    "odd": "21.00"
+                                },
+                                {
+                                    "value": "31-36",
+                                    "odd": "41.00"
+                                },
+                                {
+                                    "value": "43+",
+                                    "odd": "101.00"
+                                }
+                            ]
+                        },
+                        {
+                            "id": 19,
+                            "name": "Away Winning Margin (14-Way)",
+                            "values": [
+                                {
+                                    "value": "Draw",
+                                    "odd": "51.00"
+                                },
+                                {
+                                    "value": "19-24",
+                                    "odd": "26.00"
+                                },
+                                {
+                                    "value": "13-18",
+                                    "odd": "13.00"
+                                },
+                                {
+                                    "value": "1-6",
+                                    "odd": "4.50"
+                                },
+                                {
+                                    "value": "37-42",
+                                    "odd": "101.00"
+                                },
+                                {
+                                    "value": "7-12",
+                                    "odd": "7.50"
+                                },
+                                {
+                                    "value": "25-30",
+                                    "odd": "46.00"
+                                },
+                                {
+                                    "value": "31-36",
+                                    "odd": "81.00"
+                                },
+                                {
+                                    "value": "43+",
+                                    "odd": "111.00"
+                                }
+                            ]
+                        },
+                        {
+                            "id": 20,
+                            "name": "Over/Under 1st Qtr",
+                            "values": [
+                                {
+                                    "value": "Over 7.5",
+                                    "odd": "1.87"
+                                },
+                                {
+                                    "value": "Under 7.5",
+                                    "odd": "1.95"
+                                }
+                            ]
+                        },
+                        {
+                            "id": 33,
+                            "name": "Over/Under 2nd Qtr",
+                            "values": [
+                                {
+                                    "value": "Over 13.5",
+                                    "odd": "2.10"
+                                },
+                                {
+                                    "value": "Under 13.5",
+                                    "odd": "1.77"
+                                }
+                            ]
+                        },
+                        {
+                            "id": 34,
+                            "name": "Over/Under 3rd Qtr",
+                            "values": [
+                                {
+                                    "value": "Over 9.5",
+                                    "odd": "1.95"
+                                },
+                                {
+                                    "value": "Under 9.5",
+                                    "odd": "1.87"
+                                }
+                            ]
+                        },
+                        {
+                            "id": 35,
+                            "name": "Over/Under 4th Qtr",
+                            "values": [
+                                {
+                                    "value": "Over 13.5",
+                                    "odd": "2.05"
+                                },
+                                {
+                                    "value": "Under 13.5",
+                                    "odd": "1.80"
+                                }
+                            ]
+                        },
+                        {
+                            "id": 21,
+                            "name": "Asian Handicap 1st Qtr",
+                            "values": [
+                                {
+                                    "value": "Home -0.5",
+                                    "odd": "2.05"
+                                },
+                                {
+                                    "value": "Away -0.5",
+                                    "odd": "1.80"
+                                }
+                            ]
+                        },
+                        {
+                            "id": 36,
+                            "name": "Asian Handicap (2nd Half)",
+                            "values": [
+                                {
+                                    "value": "Home -1.5",
+                                    "odd": "1.95"
+                                },
+                                {
+                                    "value": "Away -1.5",
+                                    "odd": "1.87"
+                                }
+                            ]
+                        },
+                        {
+                            "id": 22,
+                            "name": "Home/Away - 1st Half",
+                            "values": [
+                                {
+                                    "value": "Home",
+                                    "odd": "1.61"
+                                },
+                                {
+                                    "value": "Away",
+                                    "odd": "2.45"
+                                }
+                            ]
+                        },
+                        {
+                            "id": 37,
+                            "name": "Home/Away - 2nd Half",
+                            "values": [
+                                {
+                                    "value": "Home",
+                                    "odd": "1.74"
+                                },
+                                {
+                                    "value": "Away",
+                                    "odd": "2.15"
+                                }
+                            ]
+                        },
+                        {
+                            "id": 23,
+                            "name": "Home/Away - 1st Qtr",
+                            "values": [
+                                {
+                                    "value": "Home",
+                                    "odd": "1.63"
+                                },
+                                {
+                                    "value": "Away",
+                                    "odd": "2.40"
+                                }
+                            ]
+                        },
+                        {
+                            "id": 38,
+                            "name": "Home/Away - 2nd Qtr",
+                            "values": [
+                                {
+                                    "value": "Home",
+                                    "odd": "1.74"
+                                },
+                                {
+                                    "value": "Away",
+                                    "odd": "2.15"
+                                }
+                            ]
+                        },
+                        {
+                            "id": 39,
+                            "name": "Home/Away - 3rd Qtr",
+                            "values": [
+                                {
+                                    "value": "Home",
+                                    "odd": "1.77"
+                                },
+                                {
+                                    "value": "Away",
+                                    "odd": "2.10"
+                                }
+                            ]
+                        },
+                        {
+                            "id": 40,
+                            "name": "Home/Away - 4th Qtr",
+                            "values": [
+                                {
+                                    "value": "Home",
+                                    "odd": "1.80"
+                                },
+                                {
+                                    "value": "Away",
+                                    "odd": "2.05"
+                                }
+                            ]
+                        },
+                        {
+                            "id": 47,
+                            "name": "Anytime Goal Scorer",
+                            "values": [
+                                {
+                                    "value": "Deebo Samuel (SF 49ers)",
+                                    "odd": "2.50"
+                                },
+                                {
+                                    "value": "George Kittle (SF 49ers)",
+                                    "odd": "2.88"
+                                },
+                                {
+                                    "value": "Brandon Aiyuk (SF 49ers)",
+                                    "odd": "2.88"
+                                },
+                                {
+                                    "value": "Jauan Jennings (SF 49ers)",
+                                    "odd": "5.50"
+                                },
+                                {
+                                    "value": "Ross Dwelley (SF 49ers)",
+                                    "odd": "23.00"
+                                },
+                                {
+                                    "value": "Charlie Woerner (SF 49ers)",
+                                    "odd": "13.00"
+                                },
+                                {
+                                    "value": "Jordan Mason (SF 49ers)",
+                                    "odd": "5.50"
+                                },
+                                {
+                                    "value": "Kyle Juszczyk (SF 49ers)",
+                                    "odd": "9.00"
+                                },
+                                {
+                                    "value": "Ray-Ray McCloud (SF 49ers)",
+                                    "odd": "9.00"
+                                },
+                                {
+                                    "value": "CeeDee Lamb (DAL Cowboys)",
+                                    "odd": "2.50"
+                                },
+                                {
+                                    "value": "Tony Pollard (DAL Cowboys)",
+                                    "odd": "1.83"
+                                },
+                                {
+                                    "value": "Michael Gallup (DAL Cowboys)",
+                                    "odd": "4.50"
+                                },
+                                {
+                                    "value": "Jalen Tolbert (DAL Cowboys)",
+                                    "odd": "8.50"
+                                },
+                                {
+                                    "value": "Jake Ferguson (DAL Cowboys)",
+                                    "odd": "4.00"
+                                },
+                                {
+                                    "value": "Kavontae Turpin (DAL Cowboys)",
+                                    "odd": "8.50"
+                                },
+                                {
+                                    "value": "Rico Dowdle (DAL Cowboys)",
+                                    "odd": "7.00"
+                                },
+                                {
+                                    "value": "Dak Prescott (DAL Cowboys)",
+                                    "odd": "6.00"
+                                },
+                                {
+                                    "value": "Christian McCaffrey (SF 49ers)",
+                                    "odd": "1.53"
+                                },
+                                {
+                                    "value": "Elijah Mitchell (SF 49ers)",
+                                    "odd": "5.50"
+                                },
+                                {
+                                    "value": "Brock Purdy (SF 49ers)",
+                                    "odd": "7.00"
+                                },
+                                {
+                                    "value": "Ronnie Bell (SF 49ers)",
+                                    "odd": "7.00"
+                                },
+                                {
+                                    "value": "Brandin Cooks (DAL Cowboys)",
+                                    "odd": "4.50"
+                                },
+                                {
+                                    "value": "Luke Schoonmaker (DAL Cowboys)",
+                                    "odd": "11.00"
+                                },
+                                {
+                                    "value": "Deuce Vaughn (DAL Cowboys)",
+                                    "odd": "8.50"
+                                },
+                                {
+                                    "value": "Hunter Luepke (DAL Cowboys)",
+                                    "odd": "15.00"
+                                }
+                            ]
+                        },
+                        {
+                            "id": 48,
+                            "name": "First Goal Scorer",
+                            "values": [
+                                {
+                                    "value": "No Touchdown Scorer",
+                                    "odd": "101.00"
+                                },
+                                {
+                                    "value": "Any Other Touchdown Scorer",
+                                    "odd": "8.00"
+                                },
+                                {
+                                    "value": "Deebo Samuel (SF 49ers)",
+                                    "odd": "9.50"
+                                },
+                                {
+                                    "value": "George Kittle (SF 49ers)",
+                                    "odd": "12.00"
+                                },
+                                {
+                                    "value": "Brandon Aiyuk (SF 49ers)",
+                                    "odd": "12.00"
+                                },
+                                {
+                                    "value": "Jauan Jennings (SF 49ers)",
+                                    "odd": "26.00"
+                                },
+                                {
+                                    "value": "Ross Dwelley (SF 49ers)",
+                                    "odd": "101.00"
+                                },
+                                {
+                                    "value": "Charlie Woerner (SF 49ers)",
+                                    "odd": "67.00"
+                                },
+                                {
+                                    "value": "Jordan Mason (SF 49ers)",
+                                    "odd": "26.00"
+                                },
+                                {
+                                    "value": "Kyle Juszczyk (SF 49ers)",
+                                    "odd": "41.00"
+                                },
+                                {
+                                    "value": "Ray-Ray McCloud (SF 49ers)",
+                                    "odd": "41.00"
+                                },
+                                {
+                                    "value": "CeeDee Lamb (DAL Cowboys)",
+                                    "odd": "9.50"
+                                },
+                                {
+                                    "value": "Tony Pollard (DAL Cowboys)",
+                                    "odd": "6.00"
+                                },
+                                {
+                                    "value": "Michael Gallup (DAL Cowboys)",
+                                    "odd": "21.00"
+                                },
+                                {
+                                    "value": "Jalen Tolbert (DAL Cowboys)",
+                                    "odd": "41.00"
+                                },
+                                {
+                                    "value": "Jake Ferguson (DAL Cowboys)",
+                                    "odd": "19.00"
+                                },
+                                {
+                                    "value": "Kavontae Turpin (DAL Cowboys)",
+                                    "odd": "41.00"
+                                },
+                                {
+                                    "value": "Rico Dowdle (DAL Cowboys)",
+                                    "odd": "34.00"
+                                },
+                                {
+                                    "value": "Dak Prescott (DAL Cowboys)",
+                                    "odd": "26.00"
+                                },
+                                {
+                                    "value": "Christian McCaffrey (SF 49ers)",
+                                    "odd": "4.33"
+                                },
+                                {
+                                    "value": "Elijah Mitchell (SF 49ers)",
+                                    "odd": "26.00"
+                                },
+                                {
+                                    "value": "Brock Purdy (SF 49ers)",
+                                    "odd": "34.00"
+                                },
+                                {
+                                    "value": "Ronnie Bell (SF 49ers)",
+                                    "odd": "34.00"
+                                },
+                                {
+                                    "value": "Brandin Cooks (DAL Cowboys)",
+                                    "odd": "21.00"
+                                },
+                                {
+                                    "value": "Luke Schoonmaker (DAL Cowboys)",
+                                    "odd": "51.00"
+                                },
+                                {
+                                    "value": "Deuce Vaughn (DAL Cowboys)",
+                                    "odd": "41.00"
+                                },
+                                {
+                                    "value": "Hunter Luepke (DAL Cowboys)",
+                                    "odd": "81.00"
+                                }
+                            ]
+                        },
+                        {
+                            "id": 49,
+                            "name": "Last Goal Scorer",
+                            "values": [
+                                {
+                                    "value": "No Touchdown Scorer",
+                                    "odd": "101.00"
+                                },
+                                {
+                                    "value": "Any Other Touchdown Scorer",
+                                    "odd": "6.50"
+                                },
+                                {
+                                    "value": "Deebo Samuel (SF 49ers)",
+                                    "odd": "9.50"
+                                },
+                                {
+                                    "value": "George Kittle (SF 49ers)",
+                                    "odd": "12.00"
+                                },
+                                {
+                                    "value": "Brandon Aiyuk (SF 49ers)",
+                                    "odd": "12.00"
+                                },
+                                {
+                                    "value": "Jauan Jennings (SF 49ers)",
+                                    "odd": "26.00"
+                                },
+                                {
+                                    "value": "Ross Dwelley (SF 49ers)",
+                                    "odd": "101.00"
+                                },
+                                {
+                                    "value": "Charlie Woerner (SF 49ers)",
+                                    "odd": "67.00"
+                                },
+                                {
+                                    "value": "Jordan Mason (SF 49ers)",
+                                    "odd": "26.00"
+                                },
+                                {
+                                    "value": "Kyle Juszczyk (SF 49ers)",
+                                    "odd": "41.00"
+                                },
+                                {
+                                    "value": "Ray-Ray McCloud (SF 49ers)",
+                                    "odd": "41.00"
+                                },
+                                {
+                                    "value": "CeeDee Lamb (DAL Cowboys)",
+                                    "odd": "9.50"
+                                },
+                                {
+                                    "value": "Tony Pollard (DAL Cowboys)",
+                                    "odd": "6.00"
+                                },
+                                {
+                                    "value": "Michael Gallup (DAL Cowboys)",
+                                    "odd": "21.00"
+                                },
+                                {
+                                    "value": "Jalen Tolbert (DAL Cowboys)",
+                                    "odd": "41.00"
+                                },
+                                {
+                                    "value": "Jake Ferguson (DAL Cowboys)",
+                                    "odd": "19.00"
+                                },
+                                {
+                                    "value": "Kavontae Turpin (DAL Cowboys)",
+                                    "odd": "41.00"
+                                },
+                                {
+                                    "value": "Rico Dowdle (DAL Cowboys)",
+                                    "odd": "34.00"
+                                },
+                                {
+                                    "value": "Dak Prescott (DAL Cowboys)",
+                                    "odd": "26.00"
+                                },
+                                {
+                                    "value": "Christian McCaffrey (SF 49ers)",
+                                    "odd": "4.33"
+                                },
+                                {
+                                    "value": "Elijah Mitchell (SF 49ers)",
+                                    "odd": "26.00"
+                                },
+                                {
+                                    "value": "Brock Purdy (SF 49ers)",
+                                    "odd": "34.00"
+                                },
+                                {
+                                    "value": "Ronnie Bell (SF 49ers)",
+                                    "odd": "34.00"
+                                },
+                                {
+                                    "value": "Brandin Cooks (DAL Cowboys)",
+                                    "odd": "21.00"
+                                },
+                                {
+                                    "value": "Luke Schoonmaker (DAL Cowboys)",
+                                    "odd": "51.00"
+                                },
+                                {
+                                    "value": "Deuce Vaughn (DAL Cowboys)",
+                                    "odd": "41.00"
+                                },
+                                {
+                                    "value": "Hunter Luepke (DAL Cowboys)",
+                                    "odd": "81.00"
+                                }
+                            ]
+                        },
+                        {
+                            "id": 45,
+                            "name": "Asian Handicap 2nd Qtr",
+                            "values": [
+                                {
+                                    "value": "Home -0.5",
+                                    "odd": "1.95"
+                                },
+                                {
+                                    "value": "Away -0.5",
+                                    "odd": "1.87"
+                                }
+                            ]
+                        },
+                        {
+                            "id": 46,
+                            "name": "Asian Handicap (3rd Quarter)",
+                            "values": [
+                                {
+                                    "value": "Home -0.5",
+                                    "odd": "2.15"
+                                },
+                                {
+                                    "value": "Away -0.5",
+                                    "odd": "1.74"
+                                }
+                            ]
+                        },
+                        {
+                            "id": 50,
+                            "name": "Multi Touchdown Scorer (2 or More)",
+                            "values": [
+                                {
+                                    "value": "Deebo Samuel (SF 49ers)",
+                                    "odd": "10.00"
+                                },
+                                {
+                                    "value": "George Kittle (SF 49ers)",
+                                    "odd": "15.00"
+                                },
+                                {
+                                    "value": "Brandon Aiyuk (SF 49ers)",
+                                    "odd": "15.00"
+                                },
+                                {
+                                    "value": "Jauan Jennings (SF 49ers)",
+                                    "odd": "76.00"
+                                },
+                                {
+                                    "value": "Ross Dwelley (SF 49ers)",
+                                    "odd": "126.00"
+                                },
+                                {
+                                    "value": "Charlie Woerner (SF 49ers)",
+                                    "odd": "126.00"
+                                },
+                                {
+                                    "value": "Jordan Mason (SF 49ers)",
+                                    "odd": "76.00"
+                                },
+                                {
+                                    "value": "Kyle Juszczyk (SF 49ers)",
+                                    "odd": "111.00"
+                                },
+                                {
+                                    "value": "Ray-Ray McCloud (SF 49ers)",
+                                    "odd": "111.00"
+                                },
+                                {
+                                    "value": "CeeDee Lamb (DAL Cowboys)",
+                                    "odd": "11.00"
+                                },
+                                {
+                                    "value": "Tony Pollard (DAL Cowboys)",
+                                    "odd": "5.00"
+                                },
+                                {
+                                    "value": "Michael Gallup (DAL Cowboys)",
+                                    "odd": "41.00"
+                                },
+                                {
+                                    "value": "Jalen Tolbert (DAL Cowboys)",
+                                    "odd": "111.00"
+                                },
+                                {
+                                    "value": "Jake Ferguson (DAL Cowboys)",
+                                    "odd": "36.00"
+                                },
+                                {
+                                    "value": "Kavontae Turpin (DAL Cowboys)",
+                                    "odd": "111.00"
+                                },
+                                {
+                                    "value": "Rico Dowdle (DAL Cowboys)",
+                                    "odd": "101.00"
+                                },
+                                {
+                                    "value": "Dak Prescott (DAL Cowboys)",
+                                    "odd": "76.00"
+                                },
+                                {
+                                    "value": "Christian McCaffrey (SF 49ers)",
+                                    "odd": "3.00"
+                                },
+                                {
+                                    "value": "Elijah Mitchell (SF 49ers)",
+                                    "odd": "71.00"
+                                },
+                                {
+                                    "value": "Brock Purdy (SF 49ers)",
+                                    "odd": "111.00"
+                                },
+                                {
+                                    "value": "Ronnie Bell (SF 49ers)",
+                                    "odd": "111.00"
+                                },
+                                {
+                                    "value": "Brandin Cooks (DAL Cowboys)",
+                                    "odd": "41.00"
+                                },
+                                {
+                                    "value": "Luke Schoonmaker (DAL Cowboys)",
+                                    "odd": "126.00"
+                                },
+                                {
+                                    "value": "Deuce Vaughn (DAL Cowboys)",
+                                    "odd": "111.00"
+                                },
+                                {
+                                    "value": "Hunter Luepke (DAL Cowboys)",
+                                    "odd": "126.00"
+                                }
+                            ]
+                        },
+                        {
+                            "id": 51,
+                            "name": "Multi Touchdown Scorer (3 or More)",
+                            "values": [
+                                {
+                                    "value": "Deebo Samuel (SF 49ers)",
+                                    "odd": "56.00"
+                                },
+                                {
+                                    "value": "George Kittle (SF 49ers)",
+                                    "odd": "91.00"
+                                },
+                                {
+                                    "value": "Brandon Aiyuk (SF 49ers)",
+                                    "odd": "91.00"
+                                },
+                                {
+                                    "value": "Jauan Jennings (SF 49ers)",
+                                    "odd": "151.00"
+                                },
+                                {
+                                    "value": "Ross Dwelley (SF 49ers)",
+                                    "odd": "151.00"
+                                },
+                                {
+                                    "value": "Charlie Woerner (SF 49ers)",
+                                    "odd": "151.00"
+                                },
+                                {
+                                    "value": "Jordan Mason (SF 49ers)",
+                                    "odd": "151.00"
+                                },
+                                {
+                                    "value": "Kyle Juszczyk (SF 49ers)",
+                                    "odd": "151.00"
+                                },
+                                {
+                                    "value": "Ray-Ray McCloud (SF 49ers)",
+                                    "odd": "151.00"
+                                },
+                                {
+                                    "value": "CeeDee Lamb (DAL Cowboys)",
+                                    "odd": "56.00"
+                                },
+                                {
+                                    "value": "Tony Pollard (DAL Cowboys)",
+                                    "odd": "17.00"
+                                },
+                                {
+                                    "value": "Michael Gallup (DAL Cowboys)",
+                                    "odd": "151.00"
+                                },
+                                {
+                                    "value": "Jalen Tolbert (DAL Cowboys)",
+                                    "odd": "151.00"
+                                },
+                                {
+                                    "value": "Jake Ferguson (DAL Cowboys)",
+                                    "odd": "141.00"
+                                },
+                                {
+                                    "value": "Kavontae Turpin (DAL Cowboys)",
+                                    "odd": "151.00"
+                                },
+                                {
+                                    "value": "Rico Dowdle (DAL Cowboys)",
+                                    "odd": "151.00"
+                                },
+                                {
+                                    "value": "Dak Prescott (DAL Cowboys)",
+                                    "odd": "151.00"
+                                },
+                                {
+                                    "value": "Christian McCaffrey (SF 49ers)",
+                                    "odd": "8.00"
+                                },
+                                {
+                                    "value": "Elijah Mitchell (SF 49ers)",
+                                    "odd": "151.00"
+                                },
+                                {
+                                    "value": "Brock Purdy (SF 49ers)",
+                                    "odd": "151.00"
+                                },
+                                {
+                                    "value": "Ronnie Bell (SF 49ers)",
+                                    "odd": "151.00"
+                                },
+                                {
+                                    "value": "Brandin Cooks (DAL Cowboys)",
+                                    "odd": "151.00"
+                                },
+                                {
+                                    "value": "Luke Schoonmaker (DAL Cowboys)",
+                                    "odd": "151.00"
+                                },
+                                {
+                                    "value": "Deuce Vaughn (DAL Cowboys)",
+                                    "odd": "151.00"
+                                },
+                                {
+                                    "value": "Hunter Luepke (DAL Cowboys)",
+                                    "odd": "151.00"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

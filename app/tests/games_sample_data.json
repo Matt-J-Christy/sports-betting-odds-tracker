@@ -1,0 +1,74 @@
+{
+    "get": "games",
+    "parameters": {
+        "league": "1",
+        "season": "2023",
+        "date": "2023-10-09"
+    },
+    "errors": [],
+    "results": 1,
+    "response": [
+        {
+            "game": {
+                "id": 7606,
+                "stage": "Regular Season",
+                "week": "Week 5",
+                "date": {
+                    "timezone": "UTC",
+                    "date": "2023-10-09",
+                    "time": "00: 20",
+                    "timestamp": 1696810800
+                },
+                "venue": {
+                    "name": "Levi's Stadium', 'city': 'Santa Clara'"
+                },
+                "status": {
+                    "short": "FT",
+                    "long": "Finished",
+                    "timer": "None"
+                }
+            },
+            "league": {
+                "id": 1,
+                "name": "NFL",
+                "season": "2023",
+                "logo": "https: //media-4.api-sports.io/american-football/leagues/1.png",
+                "country": {
+                    "name": "USA",
+                    "code": "US",
+                    "flag": "https://media-4.api-sports.io/flags/us.svg"
+                }
+            },
+            "teams": {
+                "home": {
+                    "id": 14,
+                    "name": "San Francisco 49ers",
+                    "logo": "https://media-4.api-sports.io/american-football/teams/14.png"
+                },
+                "away": {
+                    "id": 29,
+                    "name": "Dallas Cowboys",
+                    "logo": "https://media-4.api-sports.io/american-football/teams/29.png"
+                }
+            },
+            "scores": {
+                "home": {
+                    "quarter_1": 7,
+                    "quarter_2": 14,
+                    "quarter_3": 7,
+                    "quarter_4": 14,
+                    "overtime": "None",
+                    "total": 42
+                },
+                "away": {
+                    "quarter_1": 0,
+                    "quarter_2": 7,
+                    "quarter_3": 3,
+                    "quarter_4": 0,
+                    "overtime": "None",
+                    "total": 10
+                }
+            }
+        }
+    ]
+}
