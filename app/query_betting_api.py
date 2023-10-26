@@ -109,7 +109,7 @@ class OddsQuery():
         bucket = storage_client.get_bucket('odds-data')
 
         bucket\
-            .blob('bettings_odds_' + write_date + '/data.csv')\
+            .blob('betting_odds_' + write_date + '/data.csv')\
             .upload_from_string(betting_data.to_csv(index=False), 'text/csv')
         
         print('Writing data to GCS location:', 'odds-data/bettings_odds_' + write_date)

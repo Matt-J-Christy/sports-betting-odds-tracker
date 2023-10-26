@@ -22,3 +22,4 @@ pre-commit
 click
 fsspec
 pyarrow
+db-dtypes
