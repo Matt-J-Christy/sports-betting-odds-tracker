@@ -19,6 +19,7 @@ flake8
 dbt-core
 pytest
 pre-commit
+pylint
 click
 fsspec
 pyarrow
