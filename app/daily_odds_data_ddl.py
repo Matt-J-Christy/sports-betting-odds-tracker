@@ -2,12 +2,12 @@
 Python script to create or replace daily_odds_data table
 """
 
-from app.config.config import gcp_service_accnt
 from google.cloud import bigquery
 import os
 import sys
 
 sys.path.append(os.path.join(os.path.dirname(__file__), '../'))
+from app.config.config import gcp_service_accnt  # noqa: E402
 
 project = 'odds-tracker-402301'
 dataset_id = 'nfl_data'

@@ -2,7 +2,6 @@
 Move odds data from CGS to BigQuery
 """
 
-from app.config.config import gcp_service_accnt
 from google.cloud import storage, bigquery
 from google.oauth2 import service_account
 import sys
@@ -12,6 +11,7 @@ import pandas as pd
 from typing import Optional
 
 sys.path.append(os.path.join(os.path.dirname(__file__), '../'))
+from app.config.config import gcp_service_accnt  # noqa: E402
 
 
 class GcsToBq():
