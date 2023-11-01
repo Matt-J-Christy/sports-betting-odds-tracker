@@ -12,6 +12,7 @@ import time
 from typing import Dict, List
 import datetime
 import requests
+import numpy as np
 import pandas as pd
 
 
@@ -78,7 +79,12 @@ def get_bets(url: str,
              bet_ids: List[int]) -> pd.DataFrame:
     """
     Function to query the odds api, format the data
-    and filter the resulting dataframe.
+    and filter the resulting dataframe. The odds API
+    returns multiple alternate lines for a bet id - subgroup type, so I
+    pick the closes bets to 2, aka "even odds"
+
+    Ex: A set of over/under bets could be
+    {(30, 29.5), {31, 30.5}, ... (45, 44)}
     """
 
     result_df = pd.DataFrame()
@@ -111,12 +117,18 @@ def get_bets(url: str,
             bet_df['update_date'] = datetime.datetime\
                                             .now()\
                                             .strftime('%Y-%m-%d %H:%M:%S')
-            bet_df = bet_df.loc[
-                (bet_df['bet_name'] != 'Over/Under') |
-                ((bet_df['odd'].astype(float) < 2) &
-                 (bet_df['odd'].astype(float) > 1.9)),
-                :]
+
+            bet_df['dist_from_even'] = np.abs(bet_df['odd'].astype(float) - 2)
+            bet_df['subgroup_value'] = bet_df['value'].str.extract(
+                r'([-+]?\d*\.?\d+)')
+            bet_df['bet_subgroup'] = bet_df['value'].str.extract(
+                r"([a-zA-Z]+)")
+            bet_df['odds_rank'] = bet_df\
+                .groupby(['game_id', 'bet_id', 'bet_subgroup'])['dist_from_even']\
+                .rank(ascending=True, method='first')
+
+            bet_df = bet_df.loc[bet_df['odds_rank'] <= 2, :]
 
             result_df = pd.concat([result_df, bet_df], axis=0)
 
-    return result_df
+    return result_df.drop(['odds_rank', 'dist_from_even'], axis=1)

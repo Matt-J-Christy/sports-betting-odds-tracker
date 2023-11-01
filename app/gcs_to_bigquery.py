@@ -2,7 +2,7 @@
 Move odds data from CGS to BigQuery
 """
 
-
+from app.config.config import gcp_service_accnt
 from google.cloud import storage, bigquery
 from google.oauth2 import service_account
 import sys
@@ -12,11 +12,11 @@ import pandas as pd
 from typing import Optional
 
 sys.path.append(os.path.join(os.path.dirname(__file__), '../'))
-from app.config.config import gcp_service_accnt
+
 
 class GcsToBq():
     """
-    Creating class to query latest GCS odds data and 
+    Creating class to query latest GCS odds data and
     write to the BQ table `odds-tracker-402301.nfl_data.daily_odds_data`
     """
 
@@ -36,11 +36,11 @@ class GcsToBq():
         storage_client = storage.Client(credentials=self.gcp_service_accnt)
         bucket = storage_client.get_bucket(self.gcs_bucket)
 
-        if date != None:
+        if date is not None:
             blob_name = 'betting_data_' + date + '/data.csv'
             new_blob = bucket.blob(blob_name=blob_name)
             print('getting data from gcs bucket:', blob_name)
-        else: 
+        else:
             items = []
             for blob in bucket.list_blobs(prefix='betting'):
                 items.append(str(blob.name))
@@ -56,47 +56,64 @@ class GcsToBq():
         return df
 
     def write_to_bq(self, odds_data: pd.DataFrame) -> None:
-
-        # read in most recent data from BQ table and insert values 
-        # where the update day is > latest update day for the table
+        """
+        read in most recent data from BQ table and insert values
+        where the update day is > latest update day for the table
+        """
 
         bq = bigquery.Client(credentials=self.gcp_service_accnt)
+
+        project = 'odds-tracker-402301'
+        dataset_id = 'nfl_data'
+        table_id = 'daily_odds_data'
 
         sql = """
             with data_order as (
             select *,
-                row_number() 
-                    over(partition by game_id, value order by update_date desc) as row_num
-            from `odds-tracker-402301.nfl_data.daily_odds_data`
+                row_number()
+                    over(partition by game_id,
+                        value order by update_date desc) as row_num
+            from `{}.{}.{}`
             )
 
-            select * 
+            select *
             from data_order
             where row_num = 1;
-        """
+        """.format(
+            project, dataset_id, table_id
+        )
 
         current_table = bq.query(sql).to_dataframe()
-        current_table['update_day'] = pd.to_datetime(current_table['update_date']).dt.date
+        current_table['update_day'] = pd.to_datetime(
+            current_table['update_date']).dt.date
 
         odds_data['update_day'] = odds_data['update_date'].dt.date
 
-        merged_df = odds_data.merge(current_table[['bet_id', 'game_id', 'value', 'update_date', 'update_day']],
-                                how='left', 
-                                on=['game_id', 'bet_id', 'value', 'update_day'],
-                                suffixes=(None, '_gcp')
-                            )
-            
-        cols =  [
-                    'value', 'odd', 'bet_id', 'bet_name',
-                    'bookmaker_id', 'book', 'game_id', 'update_date'
-                ]
+        merged_df = odds_data.merge(current_table[['bet_id', 'game_id', 'value',
+                                                   'update_date', 'update_day']],
+                                    how='left',
+                                    on=['game_id', 'bet_id',
+                                        'value', 'update_day'],
+                                    suffixes=(None, '_gcp')
+                                    )
+
+        cols = [
+            'value', 'odd', 'bet_subgroup',
+            'subgroup_value', 'bet_id', 'bet_name',
+            'bookmaker_id', 'book', 'game_id', 'update_date'
+        ]
 
         new_data = merged_df.loc[merged_df['update_date_gcp'].isna(), cols]
+
+        # TODO: update bigquery target table schema
+        # TODO: rearrange columns to match table DDL
 
         if new_data.shape[0] > 0:
             schema = [
                 bigquery.SchemaField("value", "STRING"),
                 bigquery.SchemaField("odd", "FLOAT64"),
+                bigquery.SchemaField("bet_subgroup", "STRING"),
+                bigquery.SchemaField("subgroup_value", "FLOAT64"),
                 bigquery.SchemaField("bet_id", "INT64"),
                 bigquery.SchemaField("bet_name", "STRING"),
                 bigquery.SchemaField("bookmaker_id", "INT64"),
@@ -118,7 +135,8 @@ class GcsToBq():
             print(job.result)
             print('Number of rows writting to table:', new_data.shape[0])
         else:
-            print('Table already contains data from', str(odds_data['update_day'].unique()[0]))
+            print('Table already contains data from', str(
+                odds_data['update_day'].unique()[0]))
 
 
 if __name__ == '__main__':
