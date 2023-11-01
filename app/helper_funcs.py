@@ -104,8 +104,8 @@ def get_bets(url: str,
 
         json_result = json.loads(response.text)
 
-        # pausing the API for 3 seconds so the API calls aren't throttled
-        time.sleep(3)
+        # pausing the API for 10 seconds so the API calls aren't throttled
+        time.sleep(10)
 
         if json_result['response'] == []:
             print('Empty bet result returned for game:', game)
