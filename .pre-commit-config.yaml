@@ -13,10 +13,10 @@ repos:
   hooks:
     - id: ruff
 
-- repo: https://github.com/pre-commit/mirrors-autopep8
-  rev: v1.5.4
-  hooks:
-      - id: autopep8
+# - repo: https://github.com/pre-commit/mirrors-autopep8
+#   rev: v1.5.4
+#   hooks:
+#       - id: autopep8
 
 default_language_version:
-    python: python3.8
+    python: python3.9

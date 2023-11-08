@@ -1,5 +1,5 @@
 """
-Query betting odds API and write results to Google cloud storage 
+Query betting odds API and write results to Google cloud storage
 """
 
 
@@ -12,15 +12,15 @@ import pandas as pd
 
 sys.path.append(os.path.join(os.path.dirname(__file__), '../'))
 
-from app.config.config import my_api_key, gcp_service_accnt
-from app.helper_funcs import get_game_ids, get_bets
+from app.config.config import my_api_key, gcp_service_accnt  # noqa: E402
+from app.helper_funcs import get_game_ids, get_bets  # noqa: E402
 
 
 class OddsQuery():
     """
-    Querying Odds and Games API: 
+    Querying Odds and Games API:
     - base URL: https://v1.american-football.api-sports.io
-    - games 
+    - games
         - need an Id for each game in order to query the odds endpoint
         - Games API can get game information weeks into the future
     - bookmaker
@@ -35,10 +35,10 @@ class OddsQuery():
         - 6: Handicap result (spread bet)
     - JSON structure is highly nested based on book, bet type and values of the bet
     - created "test mode" parameter to limit the number of API calls when working
-    on the scripts. Free tier of the API has 100 calls per day. 
+    on the scripts. Free tier of the API has 100 calls per day.
 
-    API error messages: 
-    Response code: 
+    API error messages:
+    Response code:
     - 200 --> success
     - 401 --> unauthorized
     - 404 --> not found
@@ -65,13 +65,16 @@ class OddsQuery():
         headers = self.headers
 
         today = datetime.date.today()
+        #next_thursday = today + datetime.timedelta(3 - today.weekday() % 7)
         next_sunday = today + datetime.timedelta((6 - today.weekday() % 7))
         next_monday = today + datetime.timedelta((7 - today.weekday() % 7))
 
+        #dates = [next_thursday, next_sunday, next_monday]
         dates = [next_sunday, next_monday]
         all_game_ids = []
 
         if test_mode:
+            print("running script in test mode. Getting data for a single date")
             dates = [dates[0]]
 
         for i in dates:
@@ -84,6 +87,9 @@ class OddsQuery():
                 date=i
             )
             all_game_ids = all_game_ids + ids
+
+        if all_game_ids == []:
+            print("No game ids returned, ETL failed")
 
         if test_mode:
             all_game_ids = [all_game_ids[0]]
@@ -111,9 +117,11 @@ class OddsQuery():
         bucket\
             .blob('betting_odds_' + write_date + '/data.csv')\
             .upload_from_string(betting_data.to_csv(index=False), 'text/csv')
-        
-        print('Writing data to GCS location:', 'odds-data/bettings_odds_' + write_date)
+
+        print('Writing data to GCS location:',
+              'odds-data/bettings_odds_' + write_date)
         print('Number of rows:', betting_data.shape[0])
+
 
 if __name__ == '__main__':
     query = OddsQuery(api_key=my_api_key, gcp_service_accnt=gcp_service_accnt)

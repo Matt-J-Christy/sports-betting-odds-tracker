@@ -132,3 +132,109 @@ def get_bets(url: str,
             result_df = pd.concat([result_df, bet_df], axis=0)
 
     return result_df.drop(['odds_rank', 'dist_from_even'], axis=1)
+
+
+def get_game_metadata(game_url: str,
+                      headers: Dict[str, str],
+                      date: datetime.date) -> pd.DataFrame:
+    """
+    Get relevant NFL odds for the current year
+    """
+    year = datetime.date.today().year
+
+    payload = {
+        "league": "1",
+        "season": str(year),
+        "date": str(date)
+    }
+
+    games_res = requests.request(
+        "GET", game_url, headers=headers, params=payload, timeout=30)
+
+    json_result = json.loads(games_res.text)
+
+    data = json_result['response']
+
+    df = pd.json_normalize(data)
+
+    cols = [
+        'game.id', 'game.stage', 'game.week', 'game.date.date',
+        'game.date.time', 'game.venue.city',
+        'teams.home.id', 'teams.home.name',
+        'teams.away.id', 'teams.away.name'
+    ]
+
+    rename_dict = {
+        'game.id': 'game_id',
+        'game.stage': 'game_stage',
+        'game.week': 'week',
+        'game.date.date': 'game_date',
+        'game.date.time': 'game_time_utc',
+        'game.venue.city': 'city',
+        'teams.home.id': 'home_team_id',
+        'teams.home.name': 'home_team',
+        'teams.away.id': 'away_team_id',
+        'teams.away.name': 'away_team'
+    }
+
+    df = df\
+        .loc[:, cols]\
+        .rename(columns=rename_dict)
+
+    return df
+
+
+def get_game_scores(game_url: str,
+                    headers: Dict[str, str],
+                    date: datetime.date) -> pd.DataFrame:
+    """
+    get scores for finished games
+    """
+
+    year = datetime.date.today().year
+
+    payload = {
+        "league": "1",
+        "season": str(year),
+        "date": str(date)
+    }
+
+    games_res = requests.request(
+        "GET", game_url, headers=headers, params=payload, timeout=30)
+
+    json_result = json.loads(games_res.text)
+
+    data = json_result['response']
+
+    df = pd.json_normalize(data)
+
+    cols = [
+        'game.id', 'teams.home.id', 'teams.away.id',
+        'scores.home.quarter_1', 'scores.home.quarter_2',
+        'scores.home.quarter_3', 'scores.home.quarter_4',
+        'scores.home.total', 'scores.away.quarter_1',
+        'scores.away.quarter_2', 'scores.away.quarter_3',
+        'scores.away.quarter_4', 'scores.away.total',
+    ]
+
+    rename_dict = {
+        'game.id': 'game_id',
+        'teams.home.id': 'home_team_id',
+        'teams.away.id': 'away_team_id',
+        'scores.home.quarter_1': 'home_score_q1',
+        'scores.home.quarter_2': 'home_score_q2',
+        'scores.home.quarter_3': 'home_score_q3',
+        'scores.home.quarter_4': 'home_score_q4',
+        'scores.home.total': 'home_score_total',
+        'scores.away.quarter_1': 'away_score_q1',
+        'scores.away.quarter_2': 'away_score_q2',
+        'scores.away.quarter_3': 'away_score_q3',
+        'scores.away.quarter_4': 'away_score_q4',
+        'scores.away.total': 'away_score_total'
+    }
+
+    df = df\
+        .loc[:, cols]\
+        .rename(columns=rename_dict)
+
+    return df

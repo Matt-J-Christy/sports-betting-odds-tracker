@@ -105,9 +105,6 @@ class GcsToBq():
 
         new_data = merged_df.loc[merged_df['update_date_gcp'].isna(), cols]
 
-        # TODO: update bigquery target table schema
-        # TODO: rearrange columns to match table DDL
-
         if new_data.shape[0] > 0:
             schema = [
                 bigquery.SchemaField("value", "STRING"),

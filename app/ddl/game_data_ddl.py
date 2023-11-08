@@ -1,17 +1,18 @@
 """
-Python script to create or replace daily_odds_data table
+DDL for game metadata table
+and game results table
 """
 
 from google.cloud import bigquery
 import os
 import sys
 
-sys.path.append(os.path.join(os.path.dirname(__file__), '../'))
+sys.path.append(os.path.join(os.path.dirname(__file__), '../../'))
 from app.config.config import gcp_service_accnt  # noqa: E402
 
 project = 'odds-tracker-402301'
 dataset_id = 'nfl_data'
-table_id = 'daily_odds_data'
+table_id = 'game_metadata'
 
 
 bq = bigquery.Client(credentials=gcp_service_accnt)
@@ -20,16 +21,16 @@ bq = bigquery.Client(credentials=gcp_service_accnt)
 sql = """
 create or replace table `{}.{}.{}`
 (
-    value STRING,
-    odd float64,
-    bet_subgroup string,
-    subgroup_value float64,
-    bet_id int64,
-    bet_name string,
-    bookmaker_id int64,
-    book string,
     game_id int64,
-    update_date datetime
+    game_stage string,
+    week int,
+    game_date date,
+    game_time_utc string,
+    city string,
+    home_team_id int64,
+    home_team string,
+    away_team_id int64,
+    away_team string
 )
 """.format(
     project, dataset_id, table_id
