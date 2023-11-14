@@ -65,11 +65,11 @@ class OddsQuery():
         headers = self.headers
 
         today = datetime.date.today()
-        #next_thursday = today + datetime.timedelta(3 - today.weekday() % 7)
+        # next_thursday = today + datetime.timedelta(3 - today.weekday() % 7)
+        # API does not have Thursday data
         next_sunday = today + datetime.timedelta((6 - today.weekday() % 7))
         next_monday = today + datetime.timedelta((7 - today.weekday() % 7))
 
-        #dates = [next_thursday, next_sunday, next_monday]
         dates = [next_sunday, next_monday]
         all_game_ids = []
 

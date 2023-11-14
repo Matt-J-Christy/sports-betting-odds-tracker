@@ -181,6 +181,8 @@ def get_game_metadata(game_url: str,
         .loc[:, cols]\
         .rename(columns=rename_dict)
 
+    df['week'] = df['week'].str.extract(r'(\d+)').astype(int)
+
     return df
 
 
@@ -225,12 +227,12 @@ def get_game_scores(game_url: str,
         'scores.home.quarter_2': 'home_score_q2',
         'scores.home.quarter_3': 'home_score_q3',
         'scores.home.quarter_4': 'home_score_q4',
-        'scores.home.total': 'home_score_total',
+        'scores.home.total': 'home_score_final',
         'scores.away.quarter_1': 'away_score_q1',
         'scores.away.quarter_2': 'away_score_q2',
         'scores.away.quarter_3': 'away_score_q3',
         'scores.away.quarter_4': 'away_score_q4',
-        'scores.away.total': 'away_score_total'
+        'scores.away.total': 'away_score_final'
     }
 
     df = df\
