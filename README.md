@@ -11,7 +11,7 @@ odds-tracker\Scripts\activate.bat
 pip install -r requirements.in
 ```
 
-### Relevat API Endpoints
+### Relevant API Endpoints
 
 - Games endpoint `'https://v1.american-football.api-sports.io/games'`
     - Need to use `league_id` and `season year` and `date` to get the game ids for a given NFL week
