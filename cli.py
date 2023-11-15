@@ -11,6 +11,7 @@ from app.metadata_gcs_to_bq import GameMetadataToBq
 from app.scores_gcs_to_bq import GameScoresToBq
 from app.config.config import my_api_key, gcp_service_accnt
 from typing import Optional
+import datetime
 
 
 @click.group()
@@ -40,7 +41,7 @@ def get_new_odds(test_mode: bool):
 @click.option('--date',
               default=None,
               help='Used to specify specific day for game metadata')
-def get_game_metadata():
+def get_game_metadata(date: Optional[datetime.date] = None):
     """
     Command to get metadata from the game.
     Home team, away team, location, start time
@@ -48,7 +49,7 @@ def get_game_metadata():
     click.echo('Querying game metadata')
     games_query = GamesQuery(
         api_key=my_api_key, gcp_service_accnt=gcp_service_accnt)
-    game_metadata = games_query.query_game_metadata()
+    game_metadata = games_query.query_game_metadata(date=date)
     games_query.write_to_gcs(data=game_metadata, data_topic='metadata')
 
 
@@ -56,7 +57,7 @@ def get_game_metadata():
 @click.option('--date',
               default=None,
               help='Used to specify specific day for game scores')
-def get_game_scores():
+def get_game_scores(date: Optional[datetime.date] = None):
     """
     Command to get score data for NFL games.
     Data is stored by quarter and users
@@ -65,7 +66,7 @@ def get_game_scores():
     click.echo('Querying API for game scores')
     games_query = GamesQuery(
         api_key=my_api_key, gcp_service_accnt=gcp_service_accnt)
-    score_data = games_query.query_game_scores()
+    score_data = games_query.query_game_scores(date=date)
     games_query.write_to_gcs(data=score_data, data_topic='scores')
 
 
