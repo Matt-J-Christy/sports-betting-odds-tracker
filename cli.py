@@ -37,6 +37,9 @@ def get_new_odds(test_mode: bool):
 
 
 @cli.command()
+@click.option('--date',
+              default=None,
+              help='Used to specify specific day for game metadata')
 def get_game_metadata():
     """
     Command to get metadata from the game.
@@ -50,10 +53,14 @@ def get_game_metadata():
 
 
 @cli.command()
+@click.option('--date',
+              default=None,
+              help='Used to specify specific day for game scores')
 def get_game_scores():
     """
-    Command to get score data from the prior
-    week's NFL games. Data is stored by quarter
+    Command to get score data for NFL games.
+    Data is stored by quarter and users
+    can specify a specific date
     """
     click.echo('Querying API for game scores')
     games_query = GamesQuery(
@@ -106,7 +113,7 @@ def game_scores_to_bq(date: Optional[str] = None):
     """
     click.echo('reading scores data from GCS and writing to Bigquery')
     gcs_to_bq = GameScoresToBq(gcp_service_accnt=gcp_service_accnt,
-                               gcs_bucket='oods-data',
+                               gcs_bucket='odds-data',
                                table_id='odds-tracker-402301.nfl_data.game_results')
     gcs_data = gcs_to_bq.get_latest_gcs_data(date=date)
     gcs_to_bq.write_to_bq(score_df=gcs_data)
