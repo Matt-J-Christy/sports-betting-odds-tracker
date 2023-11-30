@@ -24,3 +24,4 @@ click
 fsspec
 pyarrow
 db-dtypes
+streamlit

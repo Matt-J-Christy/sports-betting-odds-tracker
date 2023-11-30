@@ -38,7 +38,7 @@ class GcsToBq():
         bucket = storage_client.get_bucket(self.gcs_bucket)
 
         if date is not None:
-            blob_name = 'betting_data_' + date + '/data.csv'
+            blob_name = 'betting_odds_' + date + '/data.csv'
             new_blob = bucket.blob(blob_name=blob_name)
             print('getting data from gcs bucket:', blob_name)
         else:
