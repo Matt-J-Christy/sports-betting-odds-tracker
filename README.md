@@ -9,7 +9,7 @@ odds-tracker\Scripts\activate.bat
 pip install -r requirements.in
 ```
 
-### Relevat API Endpoints
+### Relevant API Endpoints
 
 [API Docs](https://dashboard.api-football.com/)
 
