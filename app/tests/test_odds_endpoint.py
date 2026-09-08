@@ -1,41 +1,58 @@
-"""
-Test if the games API endpoint is working 
-"""
+"""Tests for The Odds API client and ingestion pipeline."""
 
-import requests
-import os
-import sys
+from unittest.mock import MagicMock, patch
 
-sys.path.append(os.path.join(os.path.dirname(__file__),'../../'))
+import pandas as pd
 
-from app.config.config import my_api_key
-
-base_url = "https://v1.american-football.api-sports.io"
-
-headers = {
-    'x-rapidapi-key': my_api_key,
-    'x-rapidapi-host': 'v1.american-football.api-sports.io'
-}
-
-# get odds for a given game, bet and book
-
-odds_url = base_url + '/odds'
-
-payload = {
-    "game": 7597,
-    # bet 365 (looks like this API does not pull american odds makers)
-    "bookmaker": 4,
-    "bet": 1  # requesting just the results for the moneyline odds
-}
+from app.query_betting_api import OddsQuery
+from app.tests.test_the_odds_api_parsing import SAMPLE_EVENT
 
 
-res = requests.request("GET", odds_url, headers=headers, params=payload)
+def test_odds_query_initialization():
+    query = OddsQuery(api_key="test_key")
+    assert query.api_key == "test_key"
+    assert query.base_url == "https://api.the-odds-api.com"
+    assert query.last_quota_info == {}
 
 
-def test_api():
-    assert res.status_code == 200, "Games API request failed"
+def test_odds_query_get_new_odds_mocked():
+    query = OddsQuery(api_key="test_key")
 
-if __name__ == '__main__':
-    test_api()
+    mock_response = MagicMock()
+    mock_response.status_code = 200
+    mock_response.json.return_value = [SAMPLE_EVENT]
+    mock_response.headers = {
+        "x-requests-remaining": "480",
+        "x-requests-used": "20",
+    }
 
-    print('Bets endpoint test passed')
+    with patch("requests.get", return_value=mock_response) as mock_get:
+        df = query.get_new_odds(sports=["americanfootball_nfl"], test_mode=False)
+
+        assert mock_get.called
+        call_args, call_kwargs = mock_get.call_args
+        assert "americanfootball_nfl" in call_args[0]
+        assert call_kwargs["params"]["apiKey"] == "test_key"
+        assert call_kwargs["params"]["markets"] == "h2h,spreads,totals"
+        assert call_kwargs["params"]["oddsFormat"] == "american"
+
+        assert isinstance(df, pd.DataFrame)
+        assert len(df) == 4
+        assert query.last_quota_info["americanfootball_nfl"]["requests_remaining"] == "480"
+
+
+def test_odds_query_multi_sport_mocked():
+    query = OddsQuery(api_key="test_key")
+
+    mock_response = MagicMock()
+    mock_response.status_code = 200
+    mock_response.json.return_value = [SAMPLE_EVENT]
+    mock_response.headers = {"x-requests-remaining": "478", "x-requests-used": "22"}
+
+    with patch("requests.get", return_value=mock_response) as mock_get:
+        df = query.get_new_odds(
+            sports=["americanfootball_nfl", "americanfootball_ncaaf"],
+            test_mode=False,
+        )
+        assert mock_get.call_count == 2
+        assert len(df) == 8  # 4 rows * 2 sports

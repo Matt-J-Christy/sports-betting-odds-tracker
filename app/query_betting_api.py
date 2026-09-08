@@ -1,129 +1,226 @@
-"""
-Query betting odds API and write results to Google cloud storage
-"""
+"""Query The Odds API for sportsbook market snapshots and store them to GCS or BigQuery."""
 
+from __future__ import annotations
 
+import datetime
 import os
 import sys
-import datetime
-from google.cloud import storage
-from google.oauth2 import service_account
+from typing import Any, Iterable
+
 import pandas as pd
+import requests
+from google.cloud import bigquery, storage
+from google.oauth2 import service_account
 
 sys.path.append(os.path.join(os.path.dirname(__file__), '../'))
 
-from app.config.config import my_api_key, gcp_service_accnt  # noqa: E402
-from app.helper_funcs import get_game_ids, get_bets  # noqa: E402
+from app.config.config import DATASET_ID, GCP_PROJECT_ID, gcp_service_accnt, my_api_key, settings  # noqa: E402
+from app.ddl.table_schemas import odds_schema  # noqa: E402
+
+DEFAULT_SPORTS = tuple(settings.the_odds_api.sports)
 
 
-class OddsQuery():
-    """
-    Querying Odds and Games API:
-    - base URL: https://v1.american-football.api-sports.io
-    - games
-        - need an Id for each game in order to query the odds endpoint
-        - Games API can get game information weeks into the future
-    - bookmaker
-        - bet 365 is the bookmaker I'm choosing
-        it looks like the API only has EU books
-        - Odds API can get bets one week into the future
-    - bet id types
-        - 1: moneyline win odds
-        - 3: over/under
-        - 4: over/under 1st half
-        - 30: over/under 2nd half
-        - 6: Handicap result (spread bet)
-    - JSON structure is highly nested based on book, bet type and values of the bet
-    - created "test mode" parameter to limit the number of API calls when working
-    on the scripts. Free tier of the API has 100 calls per day.
-
-    API error messages:
-    Response code:
-    - 200 --> success
-    - 401 --> unauthorized
-    - 404 --> not found
-    - 500 --> internal server error
-    """
+class OddsQuery:
+    """Fetch NFL and NCAA Football odds from The Odds API, flatten payloads, and persist."""
 
     def __init__(
-        self, api_key: str,
-        gcp_service_accnt: service_account.Credentials
+        self,
+        api_key: str,
+        gcp_service_accnt: service_account.Credentials | None = None,
+        bookmakers: list[str] | None = None,
     ) -> None:
-        self.base_url = "https://v1.american-football.api-sports.io"
-        self.headers = {
-            'x-rapidapi-key': api_key,
-            'x-rapidapi-host': 'v1.american-football.api-sports.io'
-        }
-        self.game_url = self.base_url + '/games'
-        self.odds_url = self.base_url + '/odds'
+        self.api_key = api_key
+        self.base_url = settings.the_odds_api.base_url
         self.gcp_service_accnt = gcp_service_accnt
+        self.bookmakers = [b.lower() for b in (bookmakers or settings.the_odds_api.bookmakers)]
+        self.markets = settings.the_odds_api.markets
+        self.odds_format = settings.the_odds_api.odds_format
+        self.regions = settings.the_odds_api.regions
+        self.last_quota_info: dict[str, Any] = {}
 
-    def get_new_odds(self, test_mode: bool) -> pd.DataFrame:
+    @staticmethod
+    def _normalize_price(value: Any) -> int:
+        try:
+            return int(value)
+        except (TypeError, ValueError):
+            return 0
 
-        game_url = self.game_url
-        odds_url = self.odds_url
-        headers = self.headers
+    @staticmethod
+    def _normalize_point(value: Any) -> float | None:
+        try:
+            return float(value)
+        except (TypeError, ValueError):
+            return None
 
-        today = datetime.date.today()
-        # next_thursday = today + datetime.timedelta(3 - today.weekday() % 7)
-        # API does not have Thursday data
-        next_sunday = today + datetime.timedelta((6 - today.weekday() % 7))
-        next_monday = today + datetime.timedelta((7 - today.weekday() % 7))
+    def _normalize_event_rows(self, events: Iterable[dict]) -> pd.DataFrame:
+        rows: list[dict[str, Any]] = []
+        snapshot_time = datetime.datetime.now(datetime.timezone.utc).isoformat()
 
-        dates = [next_sunday, next_monday]
-        all_game_ids = []
+        for event in events or []:
+            if not isinstance(event, dict):
+                continue
 
-        if test_mode:
-            print("running script in test mode. Getting data for a single date")
-            dates = [dates[0]]
+            game_id = event.get("id")
+            sport = event.get("sport_key") or event.get("sport") or "americanfootball_nfl"
+            away_team = event.get("away_team")
+            home_team = event.get("home_team")
+            commence_time = event.get("commence_time")
 
-        for i in dates:
+            for bookmaker in event.get("bookmakers", []):
+                if not isinstance(bookmaker, dict):
+                    continue
+                if str(bookmaker.get("key", "")).lower() not in self.bookmakers:
+                    continue
 
-            print('Getting game ids for date:', str(i))
+                for market in bookmaker.get("markets", []):
+                    if not isinstance(market, dict):
+                        continue
 
-            ids = get_game_ids(
-                game_url=game_url,
-                headers=headers,
-                date=i
+                    market_type = market.get("key")
+                    for outcome in market.get("outcomes", []):
+                        if not isinstance(outcome, dict):
+                            continue
+                        rows.append(
+                            {
+                                "snapshot_time": snapshot_time,
+                                "game_id": str(game_id),
+                                "sport": sport,
+                                "away_team": away_team,
+                                "home_team": home_team,
+                                "commence_time": commence_time,
+                                "market_type": market_type,
+                                "team_or_outcome": outcome.get("name"),
+                                "price": self._normalize_price(outcome.get("price")),
+                                "market_point": self._normalize_point(outcome.get("point")),
+                            }
+                        )
+
+        columns = [
+            "snapshot_time",
+            "game_id",
+            "sport",
+            "away_team",
+            "home_team",
+            "commence_time",
+            "market_type",
+            "team_or_outcome",
+            "price",
+            "market_point",
+        ]
+        return pd.DataFrame(rows, columns=columns)
+
+    def get_new_odds(
+        self,
+        sports: str | Iterable[str] | None = None,
+        test_mode: bool = False,
+    ) -> pd.DataFrame:
+        if sports is None:
+            sport_keys = list(DEFAULT_SPORTS)
+        elif isinstance(sports, str):
+            sport_keys = [sports]
+        else:
+            sport_keys = list(sports)
+
+        all_dfs: list[pd.DataFrame] = []
+
+        for sport_key in sport_keys:
+            url = f"{self.base_url}/v4/sports/{sport_key}/odds"
+            params = {
+                "apiKey": self.api_key,
+                "regions": self.regions,
+                "markets": self.markets,
+                "oddsFormat": self.odds_format,
+            }
+
+            response = requests.get(url, params=params, timeout=30)
+            self.last_quota_info[sport_key] = {
+                "status_code": response.status_code,
+                "requests_remaining": response.headers.get("x-requests-remaining"),
+                "requests_used": response.headers.get("x-requests-used"),
+            }
+            print(
+                f"[{sport_key}] Status: {response.status_code} | "
+                f"Remaining Quota: {self.last_quota_info[sport_key]['requests_remaining']} | "
+                f"Used: {self.last_quota_info[sport_key]['requests_used']}"
             )
-            all_game_ids = all_game_ids + ids
+            response.raise_for_status()
+            events = response.json()
 
-        if all_game_ids == []:
-            print("No game ids returned, ETL failed")
+            if test_mode and events:
+                events = events[:1]
 
-        if test_mode:
-            all_game_ids = [all_game_ids[0]]
+            sport_df = self._normalize_event_rows(events)
+            if not sport_df.empty:
+                all_dfs.append(sport_df)
 
-        print(all_game_ids)
+        if not all_dfs:
+            return pd.DataFrame(
+                columns=[
+                    "snapshot_time",
+                    "game_id",
+                    "sport",
+                    "away_team",
+                    "home_team",
+                    "commence_time",
+                    "market_type",
+                    "team_or_outcome",
+                    "price",
+                    "market_point",
+                ]
+            )
 
-        bet_ids = [1, 3, 4, 30, 6]
-
-        all_bets = get_bets(
-            url=odds_url,
-            headers=headers,
-            game_ids=all_game_ids,
-            bet_ids=bet_ids
-        )
-
-        return all_bets
+        return pd.concat(all_dfs, ignore_index=True)
 
     def write_to_gcs(self, betting_data: pd.DataFrame) -> None:
-        today = datetime.date.today()
-        write_date = str(today)
+        if betting_data.empty:
+            print("No odds rows to write to GCS.")
+            return
 
+        now = datetime.datetime.now(datetime.timezone.utc)
+        write_date = now.strftime("%Y-%m-%d")
+        write_time = now.strftime("%H%M%S")
+
+        bucket_name = settings.gcp.storage.bucket_name
+        prefix = settings.gcp.storage.odds_prefix
         storage_client = storage.Client(credentials=self.gcp_service_accnt)
-        bucket = storage_client.get_bucket('odds-data')
+        bucket = storage_client.get_bucket(bucket_name)
 
-        bucket\
-            .blob('betting_odds_' + write_date + '/data.csv')\
-            .upload_from_string(betting_data.to_csv(index=False), 'text/csv')
+        blob_path = f"{prefix}_{write_date}/{write_time}_data.csv"
+        bucket.blob(blob_path).upload_from_string(
+            betting_data.to_csv(index=False),
+            content_type="text/csv",
+        )
 
-        print('Writing data to GCS location:',
-              'odds-data/bettings_odds_' + write_date)
-        print('Number of rows:', betting_data.shape[0])
+        print("Writing data to GCS location:", f"{bucket_name}/{blob_path}")
+        print("Number of rows:", betting_data.shape[0])
+
+    def write_to_bq(
+        self,
+        betting_data: pd.DataFrame,
+        table_id: str | None = None,
+    ) -> None:
+        if betting_data.empty:
+            print("No odds rows to write to BigQuery.")
+            return
+
+        target_table_id = table_id or settings.gcp.full_odds_table
+        bq = bigquery.Client(credentials=self.gcp_service_accnt)
+
+        job_config = bigquery.LoadJobConfig(
+            schema=odds_schema,
+            write_disposition=bigquery.WriteDisposition.WRITE_APPEND,
+        )
+        job = bq.load_table_from_dataframe(
+            betting_data,
+            target_table_id,
+            job_config=job_config,
+        )
+        job.result()
+        print(f"Successfully appended {betting_data.shape[0]} rows to BigQuery table {target_table_id}.")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     query = OddsQuery(api_key=my_api_key, gcp_service_accnt=gcp_service_accnt)
     bet_data = query.get_new_odds(test_mode=True)
     query.write_to_gcs(betting_data=bet_data)
+

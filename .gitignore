@@ -1,6 +1,8 @@
-odds-tracker/
-config.py
 *__pycache__*
 .pytest_cache/
-odds_tracker_service_accnt.json
 scratch.py
+.vscode/
+# Ignore the odds directory, the venv
+odds/ 
+# ignore environment files
+.env

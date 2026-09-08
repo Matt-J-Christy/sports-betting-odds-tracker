@@ -4,6 +4,7 @@ numpy
 plotly
 scikit-learn
 statsmodels
+google-cloud-cli
 google-api-python-client
 google-auth
 google-auth-httplib2
@@ -11,12 +12,8 @@ google-auth-oauthlib
 google-cloud-storage
 google-cloud-bigquery
 google-cloud
-gspread
 orca
 oauth2client
-autopep8
-flake8
-dbt-core
 pytest
 pre-commit
 pylint
@@ -25,3 +22,5 @@ fsspec
 pyarrow
 db-dtypes
 streamlit
+flask
+python-dotenv

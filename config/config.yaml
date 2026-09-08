@@ -1,0 +1,32 @@
+app:
+  name: "sports-betting-odds-tracker"
+  environment: "development"
+
+the_odds_api:
+  base_url: "https://api.the-odds-api.com"
+  regions: "us"
+  markets: "h2h,spreads,totals"
+  odds_format: "american"
+  bookmakers:
+    - "fanduel"
+  sports:
+    - "americanfootball_nfl"
+    - "americanfootball_ncaaf"
+
+gcp:
+  project_id: "odds-tracker-402301"
+  dataset_id: "nfl_data"
+  tables:
+    odds_table: "daily_odds_data"
+    metadata_table: "game_metadata"
+    scores_table: "game_results"
+  storage:
+    bucket_name: "odds-data"
+    odds_prefix: "betting_odds"
+
+ingestion:
+  default_destination: "bq"  # Options: bq, gcs, both, none
+  test_mode: false
+  monthly_quota_limit: 500
+  alert_quota_remaining: 50
+

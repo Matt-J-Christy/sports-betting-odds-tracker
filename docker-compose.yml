@@ -1,0 +1,41 @@
+version: "3.8"
+
+services:
+  # Ingestion microservice (triggers via HTTP GET/POST on port 8080)
+  collector:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: collector
+    container_name: odds_collector
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env
+    environment:
+      - PORT=8080
+      - CONFIG_PATH=config/config.yaml
+      - APP_ENV=development
+    volumes:
+      - ./config:/app/config:ro
+    restart: unless-stopped
+
+  # Analytics UI (Streamlit Dashboard on port 8501)
+  dashboard:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: dashboard
+    container_name: odds_dashboard
+    ports:
+      - "8501:8501"
+    env_file:
+      - .env
+    environment:
+      - CONFIG_PATH=config/config.yaml
+      - APP_ENV=development
+    volumes:
+      - ./config:/app/config:ro
+      - ./streamlit:/app/streamlit:ro
+    restart: unless-stopped
+

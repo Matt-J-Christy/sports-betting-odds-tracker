@@ -1,26 +1,18 @@
-"""
-Define schemas for the three API queries
-1. Odds table
-2. Game metadata
-3. Game scores
-
-These schemas are used as and input into the
-gcs_to_bigquery class to move data from gcs to BQ
-"""
+"""BigQuery table schemas for the current odds tracker pipeline."""
 
 from google.cloud import bigquery
 
 odds_schema = [
-    bigquery.SchemaField("value", "STRING"),
-    bigquery.SchemaField("odd", "FLOAT64"),
-    bigquery.SchemaField("bet_subgroup", "STRING"),
-    bigquery.SchemaField("subgroup_value", "FLOAT64"),
-    bigquery.SchemaField("bet_id", "INT64"),
-    bigquery.SchemaField("bet_name", "STRING"),
-    bigquery.SchemaField("bookmaker_id", "INT64"),
-    bigquery.SchemaField("book", "STRING"),
-    bigquery.SchemaField("game_id", "INT64"),
-    bigquery.SchemaField("update_date", "DATETIME")
+    bigquery.SchemaField("snapshot_time", "TIMESTAMP"),
+    bigquery.SchemaField("game_id", "STRING"),
+    bigquery.SchemaField("sport", "STRING"),
+    bigquery.SchemaField("away_team", "STRING"),
+    bigquery.SchemaField("home_team", "STRING"),
+    bigquery.SchemaField("commence_time", "TIMESTAMP"),
+    bigquery.SchemaField("market_type", "STRING"),
+    bigquery.SchemaField("team_or_outcome", "STRING"),
+    bigquery.SchemaField("price", "INT64"),
+    bigquery.SchemaField("market_point", "FLOAT64"),
 ]
 
 game_metadata_schema = [
@@ -33,7 +25,7 @@ game_metadata_schema = [
     bigquery.SchemaField("home_team_id", "INT64"),
     bigquery.SchemaField("home_team", "STRING"),
     bigquery.SchemaField("away_team_id", "INT64"),
-    bigquery.SchemaField("away_team", "STRING")
+    bigquery.SchemaField("away_team", "STRING"),
 ]
 
 game_score_schema = [

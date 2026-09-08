@@ -3,15 +3,16 @@ Create CLICK cli file for odds tracking
 """
 
 
-import click
-from app.query_betting_api import OddsQuery
-from app.gcs_to_bigquery import GcsToBq
-from app.query_games_api import GamesQuery
-from app.metadata_gcs_to_bq import GameMetadataToBq
-from app.scores_gcs_to_bq import GameScoresToBq
-from app.config.config import my_api_key, gcp_service_accnt
-from typing import Optional
 import datetime
+from typing import Optional
+
+import click
+from app.config.config import DATASET_ID, GCP_PROJECT_ID, gcp_service_accnt, my_api_key
+from app.gcs_to_bigquery import GcsToBq
+from app.metadata_gcs_to_bq import GameMetadataToBq
+from app.query_betting_api import OddsQuery
+from app.query_games_api import GamesQuery
+from app.scores_gcs_to_bq import GameScoresToBq
 
 
 @click.group()
@@ -20,21 +21,54 @@ def cli():
 
 
 @cli.command()
-@click.option('--test-mode',
-              default=False,
-              help='Used to limit number of API calls')
-def get_new_odds(test_mode: bool):
-    """
-    Command to query API for next Sunday's NFL betting odds.
-    The OddsQuery class does the work of querying the betting API
-    and writing results to GCS
-    """
-    click.echo('getting next weeks NFL betting odds')
+@click.option(
+    "--sport",
+    type=click.Choice(["all", "nfl", "ncaaf"], case_sensitive=False),
+    default="all",
+    help="Sport to pull odds for (all, nfl, ncaaf)",
+)
+@click.option(
+    "--destination",
+    type=click.Choice(["bq", "gcs", "both", "none"], case_sensitive=False),
+    default="bq",
+    help="Where to persist the fetched odds",
+)
+@click.option(
+    "--test-mode",
+    is_flag=True,
+    default=False,
+    help="Limit API results to a single event for testing",
+)
+def get_new_odds(sport: str, destination: str, test_mode: bool):
+    """Query The Odds API for FanDuel betting odds across NFL and NCAA Football."""
+    click.echo(f"Fetching betting odds (sport={sport}, test_mode={test_mode})...")
 
-    odds_query = OddsQuery(
-        api_key=my_api_key, gcp_service_accnt=gcp_service_accnt)
-    odds_data = odds_query.get_new_odds(test_mode=test_mode)
-    odds_query.write_to_gcs(betting_data=odds_data)
+    if sport == "nfl":
+        sports = ["americanfootball_nfl"]
+    elif sport == "ncaaf":
+        sports = ["americanfootball_ncaaf"]
+    else:
+        sports = ["americanfootball_nfl", "americanfootball_ncaaf"]
+
+    odds_query = OddsQuery(api_key=my_api_key, gcp_service_accnt=gcp_service_accnt)
+    odds_data = odds_query.get_new_odds(sports=sports, test_mode=test_mode)
+
+    click.echo(f"Retrieved {len(odds_data)} snapshot rows.")
+
+    if destination in ("bq", "both"):
+        target_table = f"{GCP_PROJECT_ID}.{DATASET_ID}.daily_odds_data"
+        click.echo(f"Writing to BigQuery table: {target_table}")
+        odds_query.write_to_bq(betting_data=odds_data, table_id=target_table)
+
+    if destination in ("gcs", "both"):
+        click.echo("Writing to GCS bucket...")
+        odds_query.write_to_gcs(betting_data=odds_data)
+
+    for s_key, q_info in odds_query.last_quota_info.items():
+        click.echo(
+            f"Quota [{s_key}]: Remaining = {q_info.get('requests_remaining')}, "
+            f"Used = {q_info.get('requests_used')}"
+        )
 
 
 @cli.command()
@@ -81,7 +115,7 @@ def write_odds_to_bq(date: Optional[str] = None):
     click.echo('refreshing odds table with new CGS data')
     gcs_to_bq = GcsToBq(gcp_service_accnt=gcp_service_accnt,
                         gcs_bucket='odds-data',
-                        table_id='odds-tracker-402301.nfl_data.daily_odds_data'
+                        table_id=f'{GCP_PROJECT_ID}.{DATASET_ID}.daily_odds_data'
                         )
     gcs_data = gcs_to_bq.get_latest_gcs_data(date=date)
     gcs_to_bq.write_to_bq(odds_data=gcs_data)
@@ -98,7 +132,7 @@ def game_metadata_to_bq(date: Optional[str] = None):
     click.echo('writing game metadata from GCS to Bigquery')
     gcs_to_bq = GameMetadataToBq(gcp_service_accnt=gcp_service_accnt,
                                  gcs_bucket='odds-data',
-                                 table_id='odds-tracker-402301.nfl_data.game_metadata'
+                                 table_id=f'{GCP_PROJECT_ID}.{DATASET_ID}.game_metadata'
                                  )
     gcs_data = gcs_to_bq.get_latest_gcs_data(date=date)
     gcs_to_bq.write_to_bq(metadata_df=gcs_data)
@@ -115,7 +149,7 @@ def game_scores_to_bq(date: Optional[str] = None):
     click.echo('reading scores data from GCS and writing to Bigquery')
     gcs_to_bq = GameScoresToBq(gcp_service_accnt=gcp_service_accnt,
                                gcs_bucket='odds-data',
-                               table_id='odds-tracker-402301.nfl_data.game_results')
+                               table_id=f'{GCP_PROJECT_ID}.{DATASET_ID}.game_results')
     gcs_data = gcs_to_bq.get_latest_gcs_data(date=date)
     gcs_to_bq.write_to_bq(score_df=gcs_data)
 

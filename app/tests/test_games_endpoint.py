@@ -1,57 +1,36 @@
-"""
-Test if the games API endpoint is working 
-"""
+"""Unit tests for the games endpoint query helper."""
 
-import requests
 import datetime
-import os
-import sys
-
-sys.path.append(os.path.join(os.path.dirname(__file__),'../../'))
+from unittest.mock import MagicMock, patch
 
 from app.config.config import my_api_key
 
-
 base_url = "https://v1.american-football.api-sports.io"
-
+game_url = base_url + "/games"
 headers = {
-    'x-rapidapi-key': my_api_key,
-    'x-rapidapi-host': 'v1.american-football.api-sports.io'
+    "x-rapidapi-key": my_api_key or "test_key",
+    "x-rapidapi-host": "v1.american-football.api-sports.io",
 }
-
-# get games
-today = datetime.date.today()
-idx = (today.weekday() + 1) % 7
-last_sunday = today - datetime.timedelta(idx)
-
-
-game_url = base_url + '/games'
 
 
 def games_api_call(url, headers, date):
+    import requests
 
-    payload = {
-        "league": "1",
-        "season": "2023",
-        "date": str(date)
-    }
-
-    res = requests.request("GET", url, headers=headers, params=payload)
-
-    return res
+    payload = {"league": "1", "season": "2023", "date": str(date)}
+    return requests.request("GET", url, headers=headers, params=payload)
 
 
-def test_api():
-    res = games_api_call(
-        url=game_url,
-        headers=headers,
-        date=last_sunday
-    )
+def test_games_api_call_mocked():
+    mock_resp = MagicMock()
+    mock_resp.status_code = 200
+    mock_resp.json.return_value = {"response": []}
 
-    assert res.status_code == 200, "Games API request failed"
+    with patch("requests.request", return_value=mock_resp) as mock_req:
+        target_date = datetime.date(2023, 9, 10)
+        res = games_api_call(game_url, headers, target_date)
 
-
-if __name__ == '__main__':
-    test_api()
-
-    print('Games endpoint test passed')
+        assert res.status_code == 200
+        assert mock_req.called
+        call_args, call_kwargs = mock_req.call_args
+        assert call_kwargs["params"]["league"] == "1"
+        assert call_kwargs["params"]["date"] == "2023-09-10"

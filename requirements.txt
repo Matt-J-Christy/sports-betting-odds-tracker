@@ -1,0 +1,10 @@
+# Requirements file for building your container images
+# Ingestion Layer Requirements:
+flask==3.0.3
+requests==2.32.3
+google-cloud-bigquery==3.25.0
+
+# Frontend Layer Requirements (Uncomment if deploying the Streamlit UI):
+# streamlit==1.36.0
+# plotly==5.22.0
+# pandas==2.2.2

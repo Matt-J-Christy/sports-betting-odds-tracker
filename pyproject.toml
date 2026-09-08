@@ -1,0 +1,51 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sports-betting-odds-tracker"
+version = "0.2.0"
+description = "Automated FanDuel line movement tracker for NFL and NCAA Football with BigQuery & Streamlit"
+readme = "README.md"
+requires-python = ">=3.9"
+authors = [
+    { name = "Matt Christy" }
+]
+dependencies = [
+    "requests>=2.31.0",
+    "pandas>=2.0.0",
+    "google-cloud-bigquery>=3.20.0",
+    "google-cloud-storage>=2.10.0",
+    "google-auth>=2.20.0",
+    "python-dotenv>=1.0.0",
+    "pyyaml>=6.0.0",
+    "click>=8.0.0",
+    "db-dtypes>=1.0.0",
+    "pyarrow>=10.0.0",
+    "flask>=3.0.0",
+]
+
+[project.optional-dependencies]
+dashboard = [
+    "streamlit>=1.30.0",
+    "plotly>=5.18.0",
+]
+dev = [
+    "pytest>=8.0.0",
+    "pre-commit>=3.5.0",
+]
+
+[project.scripts]
+odds-tracker = "cli:cli"
+
+[tool.setuptools.packages.find]
+include = ["app*", "streamlit*"]
+
+[tool.pytest.ini_options]
+testpaths = ["app/tests"]
+python_files = ["test_*.py"]
+addopts = "-v --tb=short"
+filterwarnings = [
+    "ignore::DeprecationWarning",
+]
+

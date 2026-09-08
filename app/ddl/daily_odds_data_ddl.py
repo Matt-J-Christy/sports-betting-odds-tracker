@@ -1,47 +1,38 @@
-"""
-Python script to create or replace daily_odds_data table
-"""
+"""Create or replace the current FanDuel-style odds history table."""
 
-from google.cloud import bigquery
+from __future__ import annotations
+
 import os
 import sys
 
+from google.cloud import bigquery
+
 sys.path.append(os.path.join(os.path.dirname(__file__), '../../'))
-from app.config.config import gcp_service_accnt  # noqa: E402
+from app.config.config import DATASET_ID, GCP_PROJECT_ID, gcp_service_accnt  # noqa: E402
 
-project = 'odds-tracker-402301'
-dataset_id = 'nfl_data'
-table_id = 'daily_odds_data'
-
+project = GCP_PROJECT_ID
+dataset_id = DATASET_ID
+table_id = "daily_odds_data"
 
 bq = bigquery.Client(credentials=gcp_service_accnt)
 
-
 sql = """
-create or replace table `{}.{}.{}`
+CREATE OR REPLACE TABLE `{}.{}.{}`
 (
-    value STRING,
-    odd float64,
-    bet_subgroup string,
-    subgroup_value float64,
-    bet_id int64,
-    bet_name string,
-    bookmaker_id int64,
-    book string,
-    game_id int64,
-    update_date datetime
+    snapshot_time TIMESTAMP,
+    game_id STRING,
+    sport STRING,
+    away_team STRING,
+    home_team STRING,
+    commence_time TIMESTAMP,
+    market_type STRING,
+    team_or_outcome STRING,
+    price INT64,
+    market_point FLOAT64
 )
-""".format(
-    project, dataset_id, table_id
-)
+""".format(project, dataset_id, table_id)
 
-job = bq.query(sql)  # API request.
-job.result()  # Waits for the query to finish.
+job = bq.query(sql)
+job.result()
 
-print(
-    'Created or replaced table "{}.{}.{}".'.format(
-        job.destination.project,  # type: ignore
-        job.destination.dataset_id,  # type: ignore
-        job.destination.table_id,  # type: ignore
-    )
-)
+print(f'Created or replaced table "{project}.{dataset_id}.{table_id}".')

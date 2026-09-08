@@ -1,134 +1,106 @@
-"""
-Move odds data from CGS to BigQuery
-"""
+"""Move odds data from GCS to BigQuery."""
 
-from google.cloud import storage, bigquery
-from google.oauth2 import service_account
-import sys
-import os
+from __future__ import annotations
+
+import datetime
 import io
-import pandas as pd
+import os
+import sys
 from typing import Optional
+
+import pandas as pd
+from google.cloud import bigquery, storage
+from google.oauth2 import service_account
 
 sys.path.append(os.path.join(os.path.dirname(__file__), '../'))
 from app.config.config import gcp_service_accnt  # noqa: E402
 from app.ddl.table_schemas import odds_schema  # noqa: E402
 
 
-class GcsToBq():
-    """
-    Creating class to query latest GCS odds data and
-    write to the BQ table `odds-tracker-402301.nfl_data.daily_odds_data`
-    """
+class GcsToBq:
+    """Load the newest odds CSV file from GCS into the odds table."""
 
     def __init__(
         self,
-        gcp_service_accnt: service_account.Credentials,
+        gcp_service_accnt: service_account.Credentials | None,
         gcs_bucket: str,
-        table_id: str
+        table_id: str,
     ) -> None:
-
         self.gcp_service_accnt = gcp_service_accnt
         self.gcs_bucket = gcs_bucket
         self.table_id = table_id
 
     def get_latest_gcs_data(self, date: Optional[str] = None) -> pd.DataFrame:
-
         storage_client = storage.Client(credentials=self.gcp_service_accnt)
         bucket = storage_client.get_bucket(self.gcs_bucket)
 
         if date is not None:
-            blob_name = 'betting_odds_' + date + '/data.csv'
+            blob_name = "betting_odds_" + date + "/data.csv"
             new_blob = bucket.blob(blob_name=blob_name)
-            print('getting data from gcs bucket:', blob_name)
+            print("getting data from gcs bucket:", blob_name)
         else:
-            items = []
-            for blob in bucket.list_blobs(prefix='betting'):
-                items.append(str(blob.name))
+            items = [str(blob.name) for blob in bucket.list_blobs(prefix="betting")]
             items.sort(reverse=True)
+            if not items:
+                raise FileNotFoundError("No betting odds CSVs found in the GCS bucket.")
             last_data = items[0]
-            print('getting data from gcs bucket:', last_data)
+            print("getting data from gcs bucket:", last_data)
             new_blob = bucket.blob(blob_name=last_data)
 
         blob_bytes = new_blob.download_as_bytes()
         df = pd.read_csv(io.BytesIO(blob_bytes))
-        df['update_date'] = pd.to_datetime(df['update_date'])
+
+        if "snapshot_time" not in df.columns:
+            df["snapshot_time"] = pd.Timestamp.now(datetime.timezone.utc).isoformat()
+        if "commence_time" not in df.columns:
+            df["commence_time"] = pd.NaT
 
         return df
 
     def write_to_bq(self, odds_data: pd.DataFrame) -> None:
-        """
-        read in most recent data from BQ table and insert values
-        where the update day is > latest update day for the table
-        """
-
         bq = bigquery.Client(credentials=self.gcp_service_accnt)
 
-        project = 'odds-tracker-402301'
-        dataset_id = 'nfl_data'
-        table_id = 'daily_odds_data'
+        if odds_data.empty:
+            print("No new odds rows to load.")
+            return
 
-        sql = """
-            with data_order as (
-            select *,
-                row_number()
-                    over(partition by game_id,
-                        value order by update_date desc) as row_num
-            from `{}.{}.{}`
-            )
+        project, dataset_id, table_name = self.table_id.split(".")
+        target_table = f"`{project}.{dataset_id}.{table_name}`"
 
-            select *
-            from data_order
-            where row_num = 1;
-        """.format(
-            project, dataset_id, table_id
+        # Check if table exists; if so, skip exact duplicate snapshot_times to prevent double-counting
+        try:
+            snapshot_times = odds_data["snapshot_time"].dropna().unique().tolist()
+            if snapshot_times:
+                quoted_times = ", ".join(f"TIMESTAMP('{t}')" for t in snapshot_times)
+                existing_check = bq.query(
+                    f"SELECT DISTINCT snapshot_time FROM {target_table} "
+                    f"WHERE snapshot_time IN ({quoted_times})"
+                ).to_dataframe()
+                if not existing_check.empty:
+                    existing_times = set(existing_check["snapshot_time"].astype(str))
+                    odds_data = odds_data[~odds_data["snapshot_time"].astype(str).isin(existing_times)]
+        except Exception as err:
+            # Table might not exist yet or empty; proceed to create/load
+            print(f"Snapshot deduplication check skipped ({err}). Appending rows.")
+
+        if odds_data.empty:
+            print("Table already contains this exact snapshot timestamp.")
+            return
+
+        job_config = bigquery.LoadJobConfig(
+            schema=odds_schema,
+            write_disposition=bigquery.WriteDisposition.WRITE_APPEND,
         )
-
-        current_table = bq.query(sql).to_dataframe()
-        current_table['update_day'] = pd.to_datetime(
-            current_table['update_date']).dt.date
-
-        odds_data['update_day'] = odds_data['update_date'].dt.date
-
-        merged_df = odds_data.merge(current_table[['bet_id', 'game_id', 'value',
-                                                   'update_date', 'update_day']],
-                                    how='left',
-                                    on=['game_id', 'bet_id',
-                                        'value', 'update_day'],
-                                    suffixes=(None, '_gcp')
-                                    )
-
-        cols = [
-            'value', 'odd', 'bet_subgroup',
-            'subgroup_value', 'bet_id', 'bet_name',
-            'bookmaker_id', 'book', 'game_id', 'update_date'
-        ]
-
-        new_data = merged_df.loc[merged_df['update_date_gcp'].isna(), cols]
-
-        if new_data.shape[0] > 0:
-
-            job_config = bigquery.LoadJobConfig(
-                schema=odds_schema
-            )
-
-            job = bq.load_table_from_dataframe(
-                new_data,
-                self.table_id,
-                job_config=job_config
-            )
-
-            print(job.result)
-            print('Writing {} rows to table'.format(new_data.shape[0]))
-        else:
-            print('Table already contains data from', str(
-                odds_data['update_day'].unique()[0]))
+        job = bq.load_table_from_dataframe(odds_data, self.table_id, job_config=job_config)
+        job.result()
+        print(f"Successfully appended {odds_data.shape[0]} rows to table {self.table_id}")
 
 
-if __name__ == '__main__':
-    gcs_to_bq = GcsToBq(gcp_service_accnt=gcp_service_accnt,
-                        gcs_bucket='odds-data',
-                        table_id='odds-tracker-402301.nfl_data.daily_odds_data'
-                        )
+if __name__ == "__main__":
+    gcs_to_bq = GcsToBq(
+        gcp_service_accnt=gcp_service_accnt,
+        gcs_bucket="odds-data",
+        table_id="odds-tracker-402301.nfl_data.daily_odds_data",
+    )
     gcs_data = gcs_to_bq.get_latest_gcs_data()
     gcs_to_bq.write_to_bq(odds_data=gcs_data)
