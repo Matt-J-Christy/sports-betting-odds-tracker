@@ -7,7 +7,7 @@ from __future__ import annotations
 
 import logging
 import os
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from typing import Any
 
 from app.config.config import gcp_service_accnt, my_api_key
@@ -42,7 +42,7 @@ def run_ingestion_pipeline(
             "status": "success",
             "rows_ingested": rows_count,
             "sports": sports_list,
-            "timestamp": datetime.now(timezone.utc).isoformat(),
+            "timestamp": datetime.now(UTC).isoformat(),
             "quota_info": query.last_quota_info,
         }, 200
     except Exception as exc:
@@ -50,7 +50,7 @@ def run_ingestion_pipeline(
         return {
             "status": "error",
             "message": str(exc),
-            "timestamp": datetime.now(timezone.utc).isoformat(),
+            "timestamp": datetime.now(UTC).isoformat(),
         }, 500
 
 
@@ -76,10 +76,10 @@ try:
         app.run(host="0.0.0.0", port=port)
 
 except ImportError:
+    import uvicorn
     from starlette.applications import Starlette
     from starlette.responses import JSONResponse
     from starlette.routing import Route
-    import uvicorn
 
     async def health_check_route(req):
         return JSONResponse({"status": "healthy", "service": "sports-odds-collector"})

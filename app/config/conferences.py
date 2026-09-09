@@ -149,3 +149,4 @@ def is_p4_ncaaf_game(home_team: str, away_team: str) -> bool:
         True if at least one team is Power 4 (or Notre Dame), False otherwise.
     """
     return is_power_4_team(home_team) or is_power_4_team(away_team)
+

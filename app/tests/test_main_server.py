@@ -1,9 +1,8 @@
 """Tests for the serverless main.py ingestion entrypoint."""
 
-from unittest.mock import MagicMock, patch
+from unittest.mock import patch
 
 import pandas as pd
-import pytest
 
 from main import run_ingestion_pipeline
 

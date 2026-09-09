@@ -6,3 +6,7 @@ scratch.py
 odds/ 
 # ignore environment files
 .env
+# ignore Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+# ignore ruff cache
+.ruff_cache/

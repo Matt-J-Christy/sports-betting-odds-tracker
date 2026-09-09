@@ -5,7 +5,8 @@ from __future__ import annotations
 import datetime
 import os
 import sys
-from typing import Any, Iterable
+from collections.abc import Iterable
+from typing import Any
 
 import pandas as pd
 import requests
@@ -14,8 +15,8 @@ from google.oauth2 import service_account
 
 sys.path.append(os.path.join(os.path.dirname(__file__), '../'))
 
-from app.config.config import DATASET_ID, GCP_PROJECT_ID, gcp_service_accnt, my_api_key, settings  # noqa: E402
 from app.config.conferences import is_p4_ncaaf_game  # noqa: E402
+from app.config.config import gcp_service_accnt, my_api_key, settings  # noqa: E402
 from app.ddl.table_schemas import odds_schema  # noqa: E402
 
 DEFAULT_SPORTS = tuple(settings.the_odds_api.sports)
@@ -55,7 +56,7 @@ class OddsQuery:
 
     def _normalize_event_rows(self, events: Iterable[dict]) -> pd.DataFrame:
         rows: list[dict[str, Any]] = []
-        snapshot_time = datetime.datetime.now(datetime.timezone.utc).isoformat()
+        snapshot_time = datetime.datetime.now(datetime.UTC).isoformat()
 
         for event in events or []:
             if not isinstance(event, dict):
@@ -185,7 +186,7 @@ class OddsQuery:
             print("No odds rows to write to GCS.")
             return
 
-        now = datetime.datetime.now(datetime.timezone.utc)
+        now = datetime.datetime.now(datetime.UTC)
         write_date = now.strftime("%Y-%m-%d")
         write_time = now.strftime("%H%M%S")
 

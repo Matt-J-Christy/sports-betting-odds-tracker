@@ -2,9 +2,10 @@
 Game scores table DDL
 """
 
-from google.cloud import bigquery
 import os
 import sys
+
+from google.cloud import bigquery
 
 sys.path.append(os.path.join(os.path.dirname(__file__), '../../'))
 from app.config.config import gcp_service_accnt  # noqa: E402
@@ -17,8 +18,8 @@ table_id = 'game_results'
 bq = bigquery.Client(credentials=gcp_service_accnt)
 
 
-sql = """
-create or replace table `{}.{}.{}`
+sql = f"""
+create or replace table `{project}.{dataset_id}.{table_id}`
 (
     game_id int64,
     home_team_id int64,
@@ -34,9 +35,7 @@ create or replace table `{}.{}.{}`
     away_score_q4 int64,
     away_score_final int64
 )
-""".format(
-    project, dataset_id, table_id
-)
+"""
 
 job = bq.query(sql)  # API request.
 job.result()  # Waits for the query to finish.

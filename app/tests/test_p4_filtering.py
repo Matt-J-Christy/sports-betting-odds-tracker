@@ -12,12 +12,10 @@ Covers:
 
 from __future__ import annotations
 
-import pandas as pd
 import pytest
 
 from app.config.conferences import is_p4_ncaaf_game, is_power_4_team
 from app.query_betting_api import OddsQuery
-
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Fixtures helpers
@@ -191,3 +189,4 @@ class TestOddsQueryP4Filter:
             "commence_time", "market_type", "team_or_outcome", "price", "market_point",
         ]
         assert list(df.columns) == expected_cols
+

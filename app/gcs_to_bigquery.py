@@ -6,7 +6,6 @@ import datetime
 import io
 import os
 import sys
-from typing import Optional
 
 import pandas as pd
 from google.cloud import bigquery, storage
@@ -30,7 +29,7 @@ class GcsToBq:
         self.gcs_bucket = gcs_bucket
         self.table_id = table_id
 
-    def get_latest_gcs_data(self, date: Optional[str] = None) -> pd.DataFrame:
+    def get_latest_gcs_data(self, date: str | None = None) -> pd.DataFrame:
         storage_client = storage.Client(credentials=self.gcp_service_accnt)
         bucket = storage_client.get_bucket(self.gcs_bucket)
 
@@ -51,7 +50,7 @@ class GcsToBq:
         df = pd.read_csv(io.BytesIO(blob_bytes))
 
         if "snapshot_time" not in df.columns:
-            df["snapshot_time"] = pd.Timestamp.now(datetime.timezone.utc).isoformat()
+            df["snapshot_time"] = pd.Timestamp.now(datetime.UTC).isoformat()
         if "commence_time" not in df.columns:
             df["commence_time"] = pd.NaT
 

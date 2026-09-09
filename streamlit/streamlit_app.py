@@ -2,13 +2,12 @@
 
 from __future__ import annotations
 
-import os
 import sys
-from datetime import datetime, timezone
 from pathlib import Path
 
 import pandas as pd
 import plotly.express as px
+
 import streamlit as st
 
 # Setup project root import
@@ -16,7 +15,7 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from app.config.config import DATASET_ID, GCP_PROJECT_ID, gcp_service_accnt
+from app.config.config import DATASET_ID, GCP_PROJECT_ID, gcp_service_accnt  # noqa: E402
 
 st.set_page_config(
     page_title="FanDuel Football Odds Tracker",
@@ -116,7 +115,7 @@ with st.sidebar:
     st.header("⚙️ Data Source")
     st.text(f"Project: {GCP_PROJECT_ID}")
     st.text(f"Dataset: {DATASET_ID}")
-    st.text(f"Table:   daily_odds_data")
+    st.text("Table:   daily_odds_data")
 
     if st.button("🔄 Refresh Data Cache"):
         st.cache_data.clear()

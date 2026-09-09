@@ -16,8 +16,8 @@ table_id = "daily_odds_data"
 
 bq = bigquery.Client(credentials=gcp_service_accnt)
 
-sql = """
-CREATE OR REPLACE TABLE `{}.{}.{}`
+sql = f"""
+CREATE OR REPLACE TABLE `{project}.{dataset_id}.{table_id}`
 (
     snapshot_time TIMESTAMP,
     game_id STRING,
@@ -30,7 +30,7 @@ CREATE OR REPLACE TABLE `{}.{}.{}`
     price INT64,
     market_point FLOAT64
 )
-""".format(project, dataset_id, table_id)
+"""
 
 job = bq.query(sql)
 job.result()

@@ -2,20 +2,20 @@
 Move game metadata data from CGS to BigQuery
 """
 
-from google.cloud import storage, bigquery
-from google.oauth2 import service_account
-import sys
-import os
 import io
+import os
+import sys
+
 import pandas as pd
-from typing import Optional
+from google.cloud import bigquery, storage
+from google.oauth2 import service_account
 
 sys.path.append(os.path.join(os.path.dirname(__file__), '../'))
 from app.config.config import gcp_service_accnt  # noqa: E402
 from app.ddl.table_schemas import game_metadata_schema  # noqa: E402
 
 
-class GameMetadataToBq():
+class GameMetadataToBq:
     """
     Creating class to query latest GCS odds data and
     write to the BQ table `odds-tracker-402301.nfl_data.game_metadata`
@@ -32,7 +32,7 @@ class GameMetadataToBq():
         self.gcs_bucket = gcs_bucket
         self.table_id = table_id
 
-    def get_latest_gcs_data(self, date: Optional[str] = None) -> pd.DataFrame:
+    def get_latest_gcs_data(self, date: str | None = None) -> pd.DataFrame:
 
         storage_client = storage.Client(credentials=self.gcp_service_accnt)
         bucket = storage_client.get_bucket(self.gcs_bucket)
@@ -69,12 +69,10 @@ class GameMetadataToBq():
         dataset_id = 'nfl_data'
         table_id = 'game_metadata'
 
-        sql = """
+        sql = f"""
             select game_id
-            from `{}.{}.{}`
-        """.format(
-            project, dataset_id, table_id
-        )
+            from `{project}.{dataset_id}.{table_id}`
+        """
 
         current_table = bq.query(sql).to_dataframe()
 
@@ -94,7 +92,7 @@ class GameMetadataToBq():
             )
 
             print(job.result)
-            print('Writing {} rows to table'.format(new_data.shape[0]))
+            print(f'Writing {new_data.shape[0]} rows to table')
         else:
             print('Metadata for games alread exists')
 

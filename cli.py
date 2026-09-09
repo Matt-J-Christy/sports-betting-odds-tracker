@@ -4,9 +4,9 @@ Create CLICK cli file for odds tracking
 
 
 import datetime
-from typing import Optional
 
 import click
+
 from app.config.config import DATASET_ID, GCP_PROJECT_ID, gcp_service_accnt, my_api_key
 from app.gcs_to_bigquery import GcsToBq
 from app.metadata_gcs_to_bq import GameMetadataToBq
@@ -75,7 +75,7 @@ def get_new_odds(sport: str, destination: str, test_mode: bool):
 @click.option('--date',
               default=None,
               help='Used to specify specific day for game metadata')
-def get_game_metadata(date: Optional[datetime.date] = None):
+def get_game_metadata(date: datetime.date | None = None):
     """
     Command to get metadata from the game.
     Home team, away team, location, start time
@@ -91,7 +91,7 @@ def get_game_metadata(date: Optional[datetime.date] = None):
 @click.option('--date',
               default=None,
               help='Used to specify specific day for game scores')
-def get_game_scores(date: Optional[datetime.date] = None):
+def get_game_scores(date: datetime.date | None = None):
     """
     Command to get score data for NFL games.
     Data is stored by quarter and users
@@ -108,7 +108,7 @@ def get_game_scores(date: Optional[datetime.date] = None):
 @click.option('--date',
               default=None,
               help='Move latest data to BQ or specify specific date for backfill')
-def write_odds_to_bq(date: Optional[str] = None):
+def write_odds_to_bq(date: str | None = None):
     """
     Command to move latest GCS data to BigQuery
     """
@@ -125,7 +125,7 @@ def write_odds_to_bq(date: Optional[str] = None):
 @click.option('--date',
               default=None,
               help='Move latest data to BQ or specify specific date for backfill')
-def game_metadata_to_bq(date: Optional[str] = None):
+def game_metadata_to_bq(date: str | None = None):
     """
     writing game metadata to Bigquery table
     """
@@ -142,7 +142,7 @@ def game_metadata_to_bq(date: Optional[str] = None):
 @click.option('--date',
               default=None,
               help='Move latest data to BQ or specify specific date for backfill')
-def game_scores_to_bq(date: Optional[str] = None):
+def game_scores_to_bq(date: str | None = None):
     """
     Writing completed game scores to bigquery
     """

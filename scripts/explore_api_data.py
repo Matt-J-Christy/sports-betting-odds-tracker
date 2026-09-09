@@ -20,10 +20,9 @@ import pandas as pd
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-from app.config.config import gcp_service_accnt, my_api_key
-from app.query_betting_api import OddsQuery
-from app.query_games_api import GamesQuery
-
+from app.config.config import gcp_service_accnt, my_api_key  # noqa: E402
+from app.query_betting_api import OddsQuery  # noqa: E402
+from app.query_games_api import GamesQuery  # noqa: E402
 
 FIXTURES = {
     "odds": ROOT / "app/tests/test_the_odds_api_parsing.py",

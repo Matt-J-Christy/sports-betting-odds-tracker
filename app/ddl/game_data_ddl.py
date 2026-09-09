@@ -3,9 +3,10 @@ DDL for game metadata table
 and game results table
 """
 
-from google.cloud import bigquery
 import os
 import sys
+
+from google.cloud import bigquery
 
 sys.path.append(os.path.join(os.path.dirname(__file__), '../../'))
 from app.config.config import gcp_service_accnt  # noqa: E402
@@ -18,8 +19,8 @@ table_id = 'game_metadata'
 bq = bigquery.Client(credentials=gcp_service_accnt)
 
 
-sql = """
-create or replace table `{}.{}.{}`
+sql = f"""
+create or replace table `{project}.{dataset_id}.{table_id}`
 (
     game_id int64,
     game_stage string,
@@ -32,9 +33,7 @@ create or replace table `{}.{}.{}`
     away_team_id int64,
     away_team string
 )
-""".format(
-    project, dataset_id, table_id
-)
+"""
 
 job = bq.query(sql)  # API request.
 job.result()  # Waits for the query to finish.

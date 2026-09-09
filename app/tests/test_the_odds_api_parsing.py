@@ -2,7 +2,6 @@ import pandas as pd
 
 from app.query_betting_api import OddsQuery
 
-
 SAMPLE_EVENT = {
     "id": "evt_123",
     "sport_key": "americanfootball_nfl",

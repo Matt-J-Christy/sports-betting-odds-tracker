@@ -19,9 +19,8 @@ import pandas as pd
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-from app.config.config import DATASET_ID, GCP_PROJECT_ID, gcp_service_accnt
-from app.ddl.table_schemas import game_metadata_schema, game_score_schema, odds_schema
-
+from app.config.config import DATASET_ID, GCP_PROJECT_ID, gcp_service_accnt  # noqa: E402
+from app.ddl.table_schemas import game_metadata_schema, game_score_schema, odds_schema  # noqa: E402
 
 TABLES = {
     "odds": ("daily_odds_data", odds_schema),

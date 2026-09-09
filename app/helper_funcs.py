@@ -7,18 +7,18 @@ a pandas dataframe
 - get_bets is the function for querying the odds API and returns a dataframe
 """
 
+import datetime
 import json
 import time
-from typing import Dict, List
-import datetime
-import requests
+
 import numpy as np
 import pandas as pd
+import requests
 
 
 def get_game_ids(game_url: str,
-                 headers: Dict[str, str],
-                 date: datetime.date) -> List[int]:
+                 headers: dict[str, str],
+                 date: datetime.date) -> list[int]:
     """
     Get relevant NFL odds for the current year
     """
@@ -44,7 +44,7 @@ def get_game_ids(game_url: str,
     return game_ids
 
 
-def normalize_odds_json(data: Dict[str, str], bet_ids: List[int]) -> pd.DataFrame:
+def normalize_odds_json(data: dict[str, str], bet_ids: list[int]) -> pd.DataFrame:
     """
     Formats JSON response from the betting API
     """
@@ -74,9 +74,9 @@ def normalize_odds_json(data: Dict[str, str], bet_ids: List[int]) -> pd.DataFram
 
 
 def get_bets(url: str,
-             headers: Dict[str, str],
-             game_ids: List[str],
-             bet_ids: List[int]) -> pd.DataFrame:
+             headers: dict[str, str],
+             game_ids: list[str],
+             bet_ids: list[int]) -> pd.DataFrame:
     """
     Function to query the odds api, format the data
     and filter the resulting dataframe. The odds API
@@ -135,7 +135,7 @@ def get_bets(url: str,
 
 
 def get_game_metadata(game_url: str,
-                      headers: Dict[str, str],
+                      headers: dict[str, str],
                       date: datetime.date) -> pd.DataFrame:
     """
     Get relevant NFL odds for the current year
@@ -187,7 +187,7 @@ def get_game_metadata(game_url: str,
 
 
 def get_game_scores(game_url: str,
-                    headers: Dict[str, str],
+                    headers: dict[str, str],
                     date: datetime.date) -> pd.DataFrame:
     """
     get scores for finished games

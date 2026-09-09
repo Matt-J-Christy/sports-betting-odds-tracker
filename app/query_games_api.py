@@ -3,21 +3,21 @@ File to query games API for metadata
 """
 
 
+import datetime
 import os
 import sys
-import datetime
+
+import pandas as pd
 from google.cloud import storage
 from google.oauth2 import service_account
-import pandas as pd
-from typing import Optional
 
 sys.path.append(os.path.join(os.path.dirname(__file__), '../'))
 
-from app.config.config import my_api_key, gcp_service_accnt  # noqa: E402
+from app.config.config import gcp_service_accnt, my_api_key  # noqa: E402
 from app.helper_funcs import get_game_metadata, get_game_scores  # noqa: E402
 
 
-class GamesQuery():
+class GamesQuery:
     """
     Class used to get NFL game metadata and the results of past game scores.
     Write resulting dataframes to GCS bucket
@@ -33,14 +33,14 @@ class GamesQuery():
         self.game_url = self.base_url + '/games'
         self.gcp_service_accnt = gcp_service_accnt
 
-    def query_game_metadata(self, date: Optional[datetime.date] = None) -> pd.DataFrame:
+    def query_game_metadata(self, date: datetime.date | None = None) -> pd.DataFrame:
 
         if date is None:
             today = datetime.date.today()
             # next_thursday = today + datetime.timedelta(3 - today.weekday() % 7)
             # apparently the API doesn't have Thursday night football data
-            next_sunday = today + datetime.timedelta((6 - today.weekday() % 7))
-            next_monday = today + datetime.timedelta((7 - today.weekday() % 7))
+            next_sunday = today + datetime.timedelta(6 - today.weekday() % 7)
+            next_monday = today + datetime.timedelta(7 - today.weekday() % 7)
 
             dates = [next_sunday, next_monday]
 
@@ -60,14 +60,14 @@ class GamesQuery():
 
         return df
 
-    def query_game_scores(self, date: Optional[datetime.date] = None) -> pd.DataFrame:
+    def query_game_scores(self, date: datetime.date | None = None) -> pd.DataFrame:
 
         if date is None:
             today = datetime.date.today()
             # next_thursday = today + datetime.timedelta(3 - today.weekday() % 7)
             # API does not have Thursday data
-            next_sunday = today + datetime.timedelta((6 - today.weekday() % 7))
-            next_monday = today + datetime.timedelta((7 - today.weekday() % 7))
+            next_sunday = today + datetime.timedelta(6 - today.weekday() % 7)
+            next_monday = today + datetime.timedelta(7 - today.weekday() % 7)
 
             dates = [next_sunday, next_monday]
         else:
@@ -89,7 +89,7 @@ class GamesQuery():
     def write_to_gcs(self,
                      data: pd.DataFrame,
                      data_topic: str,
-                     date: Optional[datetime.date] = None):
+                     date: datetime.date | None = None):
 
         if date is None:
             today = datetime.date.today()

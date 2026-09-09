@@ -2,19 +2,19 @@
 Backfilling data
 """
 
-import pandas as pd
-import time
-from google.oauth2 import service_account
-from google.cloud import storage, bigquery
 import io
-from typing import List
-from app.config.config import my_api_key, gcp_service_accnt
-from app.metadata_gcs_to_bq import GameMetadataToBq
-from app.scores_gcs_to_bq import GameScoresToBq
-from app.query_games_api import GamesQuery
+import time
+
+import pandas as pd
+from google.cloud import bigquery, storage
+from google.oauth2 import service_account
+
+from app.config.config import gcp_service_accnt, my_api_key
 from app.ddl.table_schemas import odds_schema
 from app.helper_funcs import get_bets
-
+from app.metadata_gcs_to_bq import GameMetadataToBq
+from app.query_games_api import GamesQuery
+from app.scores_gcs_to_bq import GameScoresToBq
 
 query = GamesQuery(api_key=my_api_key,
                    gcp_service_accnt=gcp_service_accnt
@@ -58,7 +58,7 @@ for date in dates:
         query.write_to_gcs(data=game_metadata,
                            data_topic='metadata', date=date)
     except:  # noqa
-        print('backfill for {} failed'.format(date))
+        print(f'backfill for {date} failed')
 
 
 # write data to BQ
@@ -71,7 +71,7 @@ for date in dates:
 game_ids = ['7696', '7697', '7694', '7695']
 
 
-class BackfillBets():
+class BackfillBets:
 
     def __init__(
             self, api_key: str,
@@ -89,7 +89,7 @@ class BackfillBets():
         self.gcs_bucket = gcs_bucket
         self.table_id = table_id
 
-    def get_new_odds(self, game_ids: List[str]) -> pd.DataFrame:
+    def get_new_odds(self, game_ids: list[str]) -> pd.DataFrame:
         bet_ids = [1, 3, 4, 30, 6]
 
         all_bets = get_bets(
@@ -142,7 +142,7 @@ class BackfillBets():
         )
 
         print(job.result)
-        print('Writing {} rows to table'.format(df.shape[0]))
+        print(f'Writing {df.shape[0]} rows to table')
 
 
 odds_query = BackfillBets(
