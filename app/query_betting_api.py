@@ -15,6 +15,7 @@ from google.oauth2 import service_account
 sys.path.append(os.path.join(os.path.dirname(__file__), '../'))
 
 from app.config.config import DATASET_ID, GCP_PROJECT_ID, gcp_service_accnt, my_api_key, settings  # noqa: E402
+from app.config.conferences import is_p4_ncaaf_game  # noqa: E402
 from app.ddl.table_schemas import odds_schema  # noqa: E402
 
 DEFAULT_SPORTS = tuple(settings.the_odds_api.sports)
@@ -65,6 +66,14 @@ class OddsQuery:
             away_team = event.get("away_team")
             home_team = event.get("home_team")
             commence_time = event.get("commence_time")
+
+            # Power 4 filter: for NCAA Football, only keep games where at least
+            # one team is from the ACC, SEC, Big Ten, Big 12, or Notre Dame.
+            # NFL games are always retained without filtering.
+            if sport == "americanfootball_ncaaf" and not is_p4_ncaaf_game(
+                home_team or "", away_team or ""
+            ):
+                continue
 
             for bookmaker in event.get("bookmakers", []):
                 if not isinstance(bookmaker, dict):

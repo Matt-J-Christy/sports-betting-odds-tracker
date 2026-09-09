@@ -1,10 +1,27 @@
-# Requirements file for building your container images
-# Ingestion Layer Requirements:
-flask==3.0.3
-requests==2.32.3
-google-cloud-bigquery==3.25.0
+# Production requirements for the Cloud Run ingestion collector
+# Keep this list minimal to maintain a lean container image.
 
-# Frontend Layer Requirements (Uncomment if deploying the Streamlit UI):
+# HTTP server for Cloud Run health/trigger endpoints
+flask==3.0.3
+
+# Odds API client
+requests==2.32.3
+
+# Data manipulation (required by OddsQuery._normalize_event_rows & BQ loader)
+pandas==2.2.2
+
+# BigQuery serialisation drivers (required by load_table_from_dataframe)
+pyarrow==16.1.0
+db-dtypes==1.2.0
+
+# GCP clients
+google-cloud-bigquery==3.25.0
+google-cloud-storage==2.17.0
+
+# Config loading (.env + config.yaml)
+python-dotenv==1.0.1
+pyyaml==6.0.2
+
+# Frontend Layer Requirements (Uncomment if deploying the Streamlit dashboard):
 # streamlit==1.36.0
 # plotly==5.22.0
-# pandas==2.2.2

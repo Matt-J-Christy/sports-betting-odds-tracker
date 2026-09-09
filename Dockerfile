@@ -1,8 +1,15 @@
 # ========================================================
 # Multi-Target Production Dockerfile
 # Targets:
-#   1. collector (Default): Cloud Run Ingestion Service
+#   1. collector (DEFAULT): Cloud Run Ingestion Service
 #   2. dashboard: Streamlit Analytics Dashboard
+#
+# Build the collector (default) via:
+#   docker build -t odds-collector .
+#   gcloud run deploy --source .
+#
+# Build the dashboard explicitly via:
+#   docker build --target dashboard -t odds-dashboard .
 # ========================================================
 
 # --- Base Image ---
@@ -16,7 +23,7 @@ ENV PYTHONUNBUFFERED=1 \
 
 WORKDIR $APP_HOME
 
-# Install curl for healthchecks and build dependencies
+# Install curl for healthchecks
 RUN apt-get update && apt-get install -y --no-install-recommends \
     curl \
     && rm -rf /var/lib/apt/lists/*
@@ -35,14 +42,8 @@ COPY . .
 RUN chown -R appuser:appuser $APP_HOME
 USER appuser
 
-# --- Target 1: Collector (Ingestion Service for Cloud Run) ---
-FROM base AS collector
-
-EXPOSE 8080
-
-CMD ["python", "main.py"]
-
 # --- Target 2: Dashboard (Streamlit Analytics UI) ---
+# Defined first so that the final (default) stage is the collector.
 FROM base AS dashboard
 
 USER root
@@ -55,3 +56,15 @@ HEALTHCHECK --interval=30s --timeout=5s --start-period=5s --retries=3 \
     CMD curl --fail http://localhost:8501/_stcore/health || exit 1
 
 CMD ["streamlit", "run", "streamlit/streamlit_app.py", "--server.port=8501", "--server.address=0.0.0.0"]
+
+# --- Target 1: Collector (Default — Cloud Run Ingestion Service) ---
+# This is the FINAL stage so a plain `docker build .` or
+# `gcloud run deploy --source .` automatically builds the collector.
+FROM base AS collector
+
+EXPOSE 8080
+
+HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
+    CMD curl --fail http://localhost:8080/health || exit 1
+
+CMD ["python", "main.py"]
