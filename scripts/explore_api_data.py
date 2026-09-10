@@ -22,12 +22,11 @@ sys.path.insert(0, str(ROOT))
 
 from app.config.config import gcp_service_accnt, my_api_key  # noqa: E402
 from app.query_betting_api import OddsQuery  # noqa: E402
-from app.query_games_api import GamesQuery  # noqa: E402
 
 FIXTURES = {
     "odds": ROOT / "app/tests/test_the_odds_api_parsing.py",
-    "metadata": ROOT / "app/tests/games_sample_data.json",
-    "scores": ROOT / "app/tests/games_sample_data.json",
+    "metadata": ROOT / "app/tests/the_odds_api_events_sample.json",
+    "scores": ROOT / "app/tests/the_odds_api_events_sample.json",
 }
 
 
@@ -47,37 +46,10 @@ def _load_fixture(kind: str) -> pd.DataFrame:
         )
 
     payload = json.loads(FIXTURES[kind].read_text())
-    frame = pd.json_normalize(payload.get("response", []))
+    query = OddsQuery(api_key="fixture", gcp_service_accnt=None)
     if kind == "metadata":
-        columns = {
-            "game.id": "game_id",
-            "game.stage": "game_stage",
-            "game.week": "week",
-            "game.date.date": "game_date",
-            "game.date.time": "game_time_utc",
-            "game.venue.city": "city",
-            "teams.home.id": "home_team_id",
-            "teams.home.name": "home_team",
-            "teams.away.id": "away_team_id",
-            "teams.away.name": "away_team",
-        }
-    else:
-        columns = {
-            "game.id": "game_id",
-            "teams.home.id": "home_team_id",
-            "teams.away.id": "away_team_id",
-            "scores.home.quarter_1": "home_score_q1",
-            "scores.home.quarter_2": "home_score_q2",
-            "scores.home.quarter_3": "home_score_q3",
-            "scores.home.quarter_4": "home_score_q4",
-            "scores.home.total": "home_score_final",
-            "scores.away.quarter_1": "away_score_q1",
-            "scores.away.quarter_2": "away_score_q2",
-            "scores.away.quarter_3": "away_score_q3",
-            "scores.away.quarter_4": "away_score_q4",
-            "scores.away.total": "away_score_final",
-        }
-    return frame.rename(columns=columns).reindex(columns=list(columns.values()))
+        return query._normalize_event_metadata(payload)
+    return query._normalize_score_rows(payload)
 
 
 def _load_live(kind: str, requested_date: date | None) -> pd.DataFrame:
@@ -87,10 +59,10 @@ def _load_live(kind: str, requested_date: date | None) -> pd.DataFrame:
         return OddsQuery(api_key=my_api_key, gcp_service_accnt=None).get_new_odds(
             test_mode=False
         )
-    query = GamesQuery(api_key=my_api_key, gcp_service_accnt=gcp_service_accnt)
+    query = OddsQuery(api_key=my_api_key, gcp_service_accnt=gcp_service_accnt)
     if kind == "metadata":
-        return query.query_game_metadata(requested_date)
-    return query.query_game_scores(requested_date)
+        return query.get_game_metadata(test_mode=False)
+    return query.get_game_scores(test_mode=False)
 
 
 def _report(frame: pd.DataFrame) -> None:

@@ -54,6 +54,131 @@ class OddsQuery:
         except (TypeError, ValueError):
             return None
 
+    @staticmethod
+    def _event_columns() -> list[str]:
+        return [
+            "event_id",
+            "sport_key",
+            "sport_title",
+            "commence_time",
+            "home_team",
+            "away_team",
+        ]
+
+    @staticmethod
+    def _score_columns() -> list[str]:
+        return [
+            "event_id",
+            "sport_key",
+            "sport_title",
+            "commence_time",
+            "completed",
+            "last_update",
+            "home_team",
+            "away_team",
+            "home_score",
+            "away_score",
+        ]
+
+    def _request_events(self, sport_key: str, resource: str) -> list[dict[str, Any]]:
+        response = requests.get(
+            f"{self.base_url}/v4/sports/{sport_key}/{resource}",
+            params={"apiKey": self.api_key},
+            timeout=30,
+        )
+        response.raise_for_status()
+        events = response.json()
+        return events if isinstance(events, list) else []
+
+    def _normalize_event_metadata(self, events: Iterable[dict]) -> pd.DataFrame:
+        rows: list[dict[str, Any]] = []
+        seen_ids: set[str] = set()
+        for event in events or []:
+            if not isinstance(event, dict) or not event.get("id"):
+                continue
+            event_id = str(event["id"])
+            if event_id in seen_ids:
+                continue
+            seen_ids.add(event_id)
+            rows.append(
+                {
+                    "event_id": event_id,
+                    "sport_key": event.get("sport_key"),
+                    "sport_title": event.get("sport_title"),
+                    "commence_time": event.get("commence_time"),
+                    "home_team": event.get("home_team"),
+                    "away_team": event.get("away_team"),
+                }
+            )
+        return pd.DataFrame(rows, columns=self._event_columns())
+
+    def _normalize_score_rows(self, events: Iterable[dict]) -> pd.DataFrame:
+        rows: list[dict[str, Any]] = []
+        seen_ids: set[str] = set()
+        for event in events or []:
+            if not isinstance(event, dict) or not event.get("id"):
+                continue
+            event_id = str(event["id"])
+            if event_id in seen_ids:
+                continue
+            seen_ids.add(event_id)
+            scores = {
+                str(score.get("name")): self._normalize_price(score.get("score"))
+                for score in event.get("scores", [])
+                if isinstance(score, dict) and score.get("name")
+            }
+            rows.append(
+                {
+                    "event_id": event_id,
+                    "sport_key": event.get("sport_key"),
+                    "sport_title": event.get("sport_title"),
+                    "commence_time": event.get("commence_time"),
+                    "completed": bool(event.get("completed", False)),
+                    "last_update": event.get("last_update"),
+                    "home_team": event.get("home_team"),
+                    "away_team": event.get("away_team"),
+                    "home_score": scores.get(str(event.get("home_team"))),
+                    "away_score": scores.get(str(event.get("away_team"))),
+                }
+            )
+        frame = pd.DataFrame(rows, columns=self._score_columns())
+        for column in ("home_score", "away_score"):
+            if column in frame:
+                frame[column] = frame[column].astype("Int64")
+        return frame
+
+    def get_game_metadata(
+        self,
+        sports: str | Iterable[str] | None = None,
+        test_mode: bool = False,
+    ) -> pd.DataFrame:
+        sport_keys = [sports] if isinstance(sports, str) else list(sports or DEFAULT_SPORTS)
+        events: list[dict[str, Any]] = []
+        for sport_key in sport_keys:
+            sport_events = self._request_events(sport_key, "events")
+            events.extend(sport_events[:1] if test_mode else sport_events)
+        return self._normalize_event_metadata(events)
+
+    def get_game_scores(
+        self,
+        sports: str | Iterable[str] | None = None,
+        test_mode: bool = False,
+        days_from: int = 3,
+    ) -> pd.DataFrame:
+        sport_keys = [sports] if isinstance(sports, str) else list(sports or DEFAULT_SPORTS)
+        events: list[dict[str, Any]] = []
+        for sport_key in sport_keys:
+            response = requests.get(
+                f"{self.base_url}/v4/sports/{sport_key}/scores",
+                params={"apiKey": self.api_key, "daysFrom": days_from},
+                timeout=30,
+            )
+            response.raise_for_status()
+            sport_events = response.json()
+            if isinstance(sport_events, list):
+                events.extend(sport_events[:1] if test_mode else sport_events)
+        return self._normalize_score_rows(events)
+
     def _normalize_event_rows(self, events: Iterable[dict]) -> pd.DataFrame:
         rows: list[dict[str, Any]] = []
         snapshot_time = datetime.datetime.now(datetime.UTC).isoformat()
@@ -214,6 +339,10 @@ class OddsQuery:
             return
 
         target_table_id = table_id or settings.gcp.full_odds_table
+        betting_data = betting_data.copy()
+        for field in odds_schema:
+            if field.field_type == "TIMESTAMP" and field.name in betting_data.columns:
+                betting_data[field.name] = pd.to_datetime(betting_data[field.name], utc=True)
         bq = bigquery.Client(credentials=self.gcp_service_accnt)
 
         job_config = bigquery.LoadJobConfig(

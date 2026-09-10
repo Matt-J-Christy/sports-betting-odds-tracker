@@ -57,3 +57,65 @@ def test_odds_query_extracts_fanduel_rows():
         "Buffalo Bills",
         "Kansas City Chiefs",
     ]
+
+
+def test_event_metadata_is_provider_native_and_deduplicated():
+    query = OddsQuery(api_key="test-key", gcp_service_accnt=None)
+
+    df = query._normalize_event_metadata(
+        [
+            {
+                "id": "evt_123",
+                "sport_key": "americanfootball_nfl",
+                "sport_title": "NFL",
+                "home_team": "Kansas City Chiefs",
+                "away_team": "Buffalo Bills",
+                "commence_time": "2026-09-01T20:00:00Z",
+            },
+            {"id": "evt_123"},
+        ]
+    )
+
+    assert list(df.columns) == [
+        "event_id",
+        "sport_key",
+        "sport_title",
+        "commence_time",
+        "home_team",
+        "away_team",
+    ]
+    assert len(df) == 1
+    assert "game_stage" not in df.columns
+
+
+def test_score_normalizer_handles_missing_scores():
+    query = OddsQuery(api_key="test-key", gcp_service_accnt=None)
+
+    df = query._normalize_score_rows(
+        [
+            {
+                "id": "evt_123",
+                "sport_key": "americanfootball_nfl",
+                "sport_title": "NFL",
+                "home_team": "Kansas City Chiefs",
+                "away_team": "Buffalo Bills",
+                "completed": False,
+                "scores": [],
+            }
+        ]
+    )
+
+    assert list(df.columns) == [
+        "event_id",
+        "sport_key",
+        "sport_title",
+        "commence_time",
+        "completed",
+        "last_update",
+        "home_team",
+        "away_team",
+        "home_score",
+        "away_score",
+    ]
+    assert pd.isna(df.loc[0, "home_score"])
+    assert pd.isna(df.loc[0, "away_score"])

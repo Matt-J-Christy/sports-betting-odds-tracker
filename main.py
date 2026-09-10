@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import logging
 import os
+import re
 from datetime import UTC, datetime
 from typing import Any
 
@@ -15,6 +16,11 @@ from app.query_betting_api import DEFAULT_SPORTS, OddsQuery
 
 logger = logging.getLogger("odds_collector")
 logging.basicConfig(level=logging.INFO)
+
+
+def _safe_error_message(error: Exception) -> str:
+    """Remove query-string credentials before writing an exception to logs."""
+    return re.sub(r"([?&]apiKey=)[^&\s]+", r"\1[REDACTED]", str(error))
 
 
 def run_ingestion_pipeline(
@@ -46,10 +52,10 @@ def run_ingestion_pipeline(
             "quota_info": query.last_quota_info,
         }, 200
     except Exception as exc:
-        logger.exception("Ingestion failed: %s", exc)
+        logger.error("Ingestion failed: %s", _safe_error_message(exc))
         return {
             "status": "error",
-            "message": str(exc),
+            "message": _safe_error_message(exc),
             "timestamp": datetime.now(UTC).isoformat(),
         }, 500
 

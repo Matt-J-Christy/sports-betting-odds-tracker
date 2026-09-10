@@ -4,7 +4,16 @@ from unittest.mock import patch
 
 import pandas as pd
 
-from main import run_ingestion_pipeline
+from main import _safe_error_message, run_ingestion_pipeline
+
+
+def test_safe_error_message_redacts_api_keys():
+    message = _safe_error_message(
+        RuntimeError("https://example.test/path?apiKey=secret-value&markets=h2h")
+    )
+
+    assert "secret-value" not in message
+    assert "apiKey=[REDACTED]" in message
 
 
 def test_run_ingestion_pipeline_success():

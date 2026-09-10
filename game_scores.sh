@@ -5,4 +5,3 @@
 
 echo "getting last week's game results"
 python cli.py get-game-scores
-python cli.py game-scores-to-bq

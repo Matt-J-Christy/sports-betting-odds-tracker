@@ -1,0 +1,16 @@
+[
+  {
+    "id": "evt_123",
+    "sport_key": "americanfootball_nfl",
+    "sport_title": "NFL",
+    "commence_time": "2026-09-01T20:00:00Z",
+    "home_team": "Kansas City Chiefs",
+    "away_team": "Buffalo Bills",
+    "completed": true,
+    "last_update": "2026-09-02T03:30:00Z",
+    "scores": [
+      {"name": "Kansas City Chiefs", "score": "24"},
+      {"name": "Buffalo Bills", "score": "20"}
+    ]
+  }
+]

@@ -11,4 +11,6 @@ python cli.py write-odds-to-bq
 
 echo "Using CLI to get game metadata"
 python cli.py get-game-metadata
-python cli.py game-metadata-to-bq
+
+echo "Using CLI to get ESPN game scores"
+python cli.py get-game-scores

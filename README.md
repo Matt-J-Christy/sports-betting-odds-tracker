@@ -11,15 +11,11 @@ pip install -r requirements.in
 
 ### Relevant API Endpoints
 
-[API Docs](https://dashboard.api-football.com/)
+[ESPN scoreboard endpoints](https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard)
 
-- Games endpoint `'https://v1.american-football.api-sports.io/games'`
-    - Need to use `league_id` and `season year` and `date` to get the game ids for a given NFL week
-    - Games endpoint is used to collect game metadata and the game scores
-- Odds endpoint `'https://v1.american-football.api-sports.io/odds`
-    - Need to use `bookmaker` and `game id` to select the various wagers on the game
-    - Can use `bet id` to select for specific types of bets
-    - Odds update at most 4 times a day and are stored for up to a week in the past
+- ESPN supplies game metadata and scores without an API key for NFL and college football.
+- The Odds API supplies sportsbook snapshots for `daily_odds_data`.
+- Metadata and scores use ESPN event IDs (`event_id`) and final team scores; API-Sports fields and quarter-score columns are no longer part of the contract.
 
 ### Using the CLI
 
@@ -37,21 +33,17 @@ Getting Odds Data
 
 Getting Game Metadata
 - Command: `get-game-metadata`
-    - Option to specify `--date` for a specific day of games
-- Command: `game-metadata-to-bq`
-    - Option to specify a `--date` parameter in order to backfill data.
-    - If `--date` is unused the function defaults to writing the most recent GCS data to BigQuery
+    - Queries ESPN and writes provider-native event metadata directly to BigQuery.
+    - Optionally specify `--date YYYY-MM-DD` for a scoreboard date.
 
 Getting Game Results
 - Command: `get-game-scores`
-    - Option to specify `--date` for a specific day of games
-- Command: `game-scores-to-bq`
-    - Option to specify a `--date` parameter in order to backfill data.
-    - If `--date` is unused the function defaults to writing the most recent GCS data to BigQuery
+    - Queries ESPN and writes provider-native final/current scores directly to BigQuery.
+    - Optionally specify `--date YYYY-MM-DD` for a scoreboard date.
 
 ### Docker ETLs
 
-Two shell scripts are used to run the CLI inside two docker containers. `run_cli.sh` collects daily odds and game metadata, while `game_scores.sh` is used to collect the past week's NFL scores.
+The CLI and `run_cli.sh` collect odds from The Odds API and metadata/scores from ESPN. `game_scores.sh` remains available for scheduled score collection.
 
 Both docker images are deployed on GCP cloud run
 
