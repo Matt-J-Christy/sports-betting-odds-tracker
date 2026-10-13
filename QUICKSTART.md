@@ -101,10 +101,10 @@ python cli.py get-new-odds --sport nfl --destination both
 ```
 
 #### 2. Ingest Game Metadata (`get-game-metadata`)
-Queries the ESPN Scoreboard API for upcoming or historical games and appends them to `game_metadata`.
+Queries the ESPN Scoreboard API for upcoming or historical games and **upserts** them into `game_metadata` via BigQuery `MERGE` (preventing duplicates).
 
 ```bash
-# Query active/current scoreboard games
+# Query active/current scoreboard games and upsert
 python cli.py get-game-metadata
 
 # Query games for a specific calendar date (YYYY-MM-DD)
@@ -112,15 +112,16 @@ python cli.py get-game-metadata --date 2026-09-12
 ```
 
 #### 3. Ingest Game Scores & Results (`get-game-scores`)
-Queries the ESPN Scoreboard API for live scores or final results and appends them to `game_results`.
+Queries the ESPN Scoreboard API for live scores or final results and **upserts** them into `game_results` via BigQuery `MERGE` (updating in-progress scores to final).
 
 ```bash
-# Query active scoreboard scores
+# Query active scoreboard scores and upsert
 python cli.py get-game-scores
 
 # Query scores for a specific calendar date
 python cli.py get-game-scores --date 2026-09-12
 ```
+
 
 #### 4. Backfill BigQuery from Cloud Storage (`write-odds-to-bq`)
 Loads previously archived odds files from GCS bucket `odds-data` into BigQuery.

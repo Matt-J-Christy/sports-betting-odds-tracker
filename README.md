@@ -73,12 +73,19 @@ The application follows an event-driven, serverless architecture orchestrated by
 ### NCAA Football Power 4 Filtering
 To maximize signal and conserve BigQuery storage and API compute, NCAAF odds collection automatically filters for **Power 4 conferences** (SEC, Big Ten, Big 12, ACC) and high-profile independents (Notre Dame). Matchups between two non-Power 4 teams are filtered out during ingestion.
 
-### GCP Free Tier Footprint
+### GCP Free Tier Footprint & Production Schedulers
 All deployed services operate strictly within Google Cloud's Always Free tier:
-- **Cloud Run**: Configured with 1 vCPU and 512 MiB memory; `minInstanceCount = 0` (scales down to 0 when idle). Consumes ~180 invocations and ~4,320 vCPU-seconds per month (<1.2% of the 360,000 vCPU-seconds free tier limit).
-- **Cloud Scheduler**: 1 job configured (`odds-collector-four-hourly`) out of 3 free jobs allowed per account.
-- **BigQuery**: Dataset `nfl_data` uses ~1.2 MB of storage (<0.02% of the 10 GB free monthly storage limit). Query scans and streaming loads remain well under the 1 TB/month free limit.
+- **Cloud Run**: Configured with 1 vCPU and 512 MiB memory; `minInstanceCount = 0` (scales down to 0 when idle). Endpoints include `/` (odds ingestion), `/metadata` (ESPN metadata upsert), and `/scores` (ESPN score upsert). Total monthly consumption is ~220 invocations and <5,000 vCPU-seconds (<1.4% of the 360,000 vCPU-seconds free tier limit).
+- **Cloud Scheduler**: Exactly 3 jobs configured (100% of the 3 free jobs allowed per account):
+  1. `odds-collector-four-hourly` (`0 */4 * * *`): Every 4 hours, captures FanDuel odds snapshots for NFL and NCAAF.
+  2. `game-scores-daily` (`0 4 * * 1,4,5,6,0`): Daily at 04:00 AM EDT on Thu, Fri, Sat, Sun, and Mon, upserts game scores into `game_results`.
+  3. `game-metadata-bi-daily` (`0 10 * * 1,3,5,0`): Every other day starting Monday at 10:00 AM EDT, upserts schedules into `game_metadata`.
+- **BigQuery**:
+  - `daily_odds_data`: Historical time-series table appended every 4 hours (~15 MB/month).
+  - `game_metadata` & `game_results`: Ingested via atomic BigQuery `MERGE` (upsert on `event_id`), maintaining deduplicated, current records (<100 KB total).
+  - Storage is <0.02% of the 10 GB free monthly storage limit.
 - **Cloud Storage**: Bucket `gs://odds-data` stores small CSV snapshots and backup extracts (<0.001% of the 5 GB free storage limit).
+
 
 ---
 
@@ -106,11 +113,15 @@ sports-betting-odds-tracker/
 ├── config/
 │   └── config.yaml                   # Base YAML configuration
 ├── scripts/                          # Operational & exploratory scripts
+│   ├── deploy_cloud_run.py           # Container build & Cloud Run deployer
+│   ├── deploy_schedulers.py          # Cloud Scheduler REST provisioner
+│   ├── deploy_schedulers.sh          # Cloud Scheduler gcloud bash provisioner
 │   ├── explore_api_data.py           # Offline fixture-based data explorer
 │   ├── explore_bigquery_tables.ipynb # BigQuery exploratory analysis notebook
 │   ├── explore_odds_and_gcp.ipynb    # Free tier calculator & line movement notebook
 │   ├── preview_bigquery_tables.py    # Dry-run DDL generator and schema checker
 │   └── reset_bigquery_tables.py      # Guarded table provisioning / reset utility
+
 ├── streamlit/                        # Web dashboard interface
 │   ├── sql_scripts/                  # Reusable BigQuery analysis queries
 │   └── streamlit_app.py              # Interactive odds & line movement app
