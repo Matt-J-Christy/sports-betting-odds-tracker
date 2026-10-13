@@ -36,3 +36,13 @@ game_score_schema = [
     bigquery.SchemaField("home_score", "INT64"),
     bigquery.SchemaField("away_score", "INT64"),
 ]
+
+ncaa_weekly_rankings_schema = [
+    bigquery.SchemaField("snapshot_time", "TIMESTAMP"),
+    bigquery.SchemaField("weekNumber", "INT64"),
+    bigquery.SchemaField("weekStartDate", "DATE"),
+    bigquery.SchemaField("sport", "STRING"),
+    bigquery.SchemaField("team", "STRING"),
+    bigquery.SchemaField("AP_Rank", "INT64"),
+    bigquery.SchemaField("AP_Rank_LastWeek", "INT64"),
+]

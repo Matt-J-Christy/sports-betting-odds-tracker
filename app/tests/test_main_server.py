@@ -53,3 +53,32 @@ def test_run_ingestion_pipeline_missing_api_key():
         assert result["status"] == "error"
         assert "THE_ODDS_API_KEY" in result["message"]
 
+
+def test_run_metadata_pipeline_success():
+    from main import run_metadata_pipeline
+
+    mock_df = pd.DataFrame([{"event_id": "test_event"}])
+    with patch("app.query_games_api.GamesQuery.query_game_metadata", return_value=mock_df), \
+         patch("app.query_games_api.GamesQuery.upsert_to_bq", return_value=1) as mock_upsert:
+        result, status_code = run_metadata_pipeline()
+        assert status_code == 200
+        assert result["status"] == "success"
+        assert result["rows_affected"] == 1
+        assert result["rows_fetched"] == 1
+        assert mock_upsert.called
+
+
+def test_run_scores_pipeline_success():
+    from main import run_scores_pipeline
+
+    mock_df = pd.DataFrame([{"event_id": "test_event", "completed": True}])
+    with patch("app.query_games_api.GamesQuery.query_game_scores", return_value=mock_df), \
+         patch("app.query_games_api.GamesQuery.upsert_to_bq", return_value=1) as mock_upsert:
+        result, status_code = run_scores_pipeline()
+        assert status_code == 200
+        assert result["status"] == "success"
+        assert result["rows_affected"] == 1
+        assert result["rows_fetched"] == 1
+        assert mock_upsert.called
+
+

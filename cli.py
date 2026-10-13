@@ -6,10 +6,8 @@ Create CLICK cli file for odds tracking
 import datetime
 
 import click
-import pandas as pd
 
 from app.config.config import DATASET_ID, GCP_PROJECT_ID, gcp_service_accnt, my_api_key
-from app.ddl.table_schemas import game_metadata_schema, game_score_schema
 from app.gcs_to_bigquery import GcsToBq
 from app.query_betting_api import OddsQuery
 from app.query_games_api import GamesQuery
@@ -74,45 +72,26 @@ def get_new_odds(sport: str, destination: str, test_mode: bool):
 @cli.command()
 @click.option('--date', type=click.DateTime(formats=['%Y-%m-%d']), default=None)
 def get_game_metadata(date: datetime.datetime | None = None):
-    """Query ESPN event metadata and append it to BigQuery."""
-    click.echo('Querying ESPN game metadata')
+    """Query ESPN event metadata and upsert it into BigQuery."""
+    click.echo('Querying ESPN game metadata...')
     games_query = GamesQuery(api_key=my_api_key, gcp_service_accnt=gcp_service_accnt)
     game_metadata = games_query.query_game_metadata(date=date.date() if date else None)
-    target_table = f'{GCP_PROJECT_ID}.{DATASET_ID}.game_metadata'
-    from google.cloud import bigquery
-
-    game_metadata = game_metadata.copy()
-    for field in game_metadata_schema:
-        if field.field_type == 'TIMESTAMP' and field.name in game_metadata.columns:
-            game_metadata[field.name] = pd.to_datetime(game_metadata[field.name], utc=True)
-    client = bigquery.Client(credentials=gcp_service_accnt)
-    client.load_table_from_dataframe(
-        game_metadata,
-        target_table,
-        job_config=bigquery.LoadJobConfig(schema=game_metadata_schema),
-    ).result()
+    click.echo(f'Fetched {len(game_metadata)} metadata rows. Upserting into BigQuery...')
+    affected = games_query.upsert_to_bq(game_metadata, table_type='metadata')
+    click.echo(f'Upsert completed successfully ({affected} rows affected).')
 
 
 @cli.command()
 @click.option('--date', type=click.DateTime(formats=['%Y-%m-%d']), default=None)
 def get_game_scores(date: datetime.datetime | None = None):
-    """Query ESPN game scores and append them to BigQuery."""
-    click.echo('Querying ESPN game scores')
+    """Query ESPN game scores and upsert them into BigQuery."""
+    click.echo('Querying ESPN game scores...')
     games_query = GamesQuery(api_key=my_api_key, gcp_service_accnt=gcp_service_accnt)
     score_data = games_query.query_game_scores(date=date.date() if date else None)
-    target_table = f'{GCP_PROJECT_ID}.{DATASET_ID}.game_results'
-    from google.cloud import bigquery
+    click.echo(f'Fetched {len(score_data)} score rows. Upserting into BigQuery...')
+    affected = games_query.upsert_to_bq(score_data, table_type='scores')
+    click.echo(f'Upsert completed successfully ({affected} rows affected).')
 
-    score_data = score_data.copy()
-    for field in game_score_schema:
-        if field.field_type == 'TIMESTAMP' and field.name in score_data.columns:
-            score_data[field.name] = pd.to_datetime(score_data[field.name], utc=True)
-    client = bigquery.Client(credentials=gcp_service_accnt)
-    client.load_table_from_dataframe(
-        score_data,
-        target_table,
-        job_config=bigquery.LoadJobConfig(schema=game_score_schema),
-    ).result()
 
 
 @cli.command()
@@ -132,10 +111,45 @@ def write_odds_to_bq(date: str | None = None):
     gcs_to_bq.write_to_bq(odds_data=gcs_data)
 
 
+@cli.command()
+def get_ncaa_rankings():
+    """Query ESPN NCAA AP Top 25 rankings and upsert into BigQuery."""
+    click.echo('Querying ESPN NCAA AP Top 25 rankings...')
+    games_query = GamesQuery(api_key=my_api_key, gcp_service_accnt=gcp_service_accnt)
+    rankings_df = games_query.query_ncaa_rankings()
+    click.echo(f'Fetched {len(rankings_df)} ranked teams. Upserting into BigQuery...')
+    affected = games_query.upsert_to_bq(rankings_df, table_type='rankings')
+    click.echo(f'Upsert completed successfully ({affected} rows affected).')
+
+
+@cli.command()
+@click.option('--date', type=click.DateTime(formats=['%Y-%m-%d']), default=None)
+def sync_games(date: datetime.datetime | None = None):
+    """Query and upsert both ESPN game metadata and scores in one command."""
+    click.echo('Syncing ESPN game metadata and scores...')
+    games_query = GamesQuery(api_key=my_api_key, gcp_service_accnt=gcp_service_accnt)
+    dt = date.date() if date else None
+
+    metadata_df = games_query.query_game_metadata(date=dt)
+    click.echo(f'Fetched {len(metadata_df)} metadata rows.')
+    meta_affected = games_query.upsert_to_bq(metadata_df, table_type='metadata')
+
+    scores_df = games_query.query_game_scores(date=dt)
+    click.echo(f'Fetched {len(scores_df)} score rows.')
+    scores_affected = games_query.upsert_to_bq(scores_df, table_type='scores')
+
+    click.echo(
+        f'Sync complete. Metadata: {meta_affected} rows affected, Scores: {scores_affected} rows affected.'
+    )
+
+
 cli.add_command(get_new_odds)
 cli.add_command(write_odds_to_bq)
 cli.add_command(get_game_metadata)
 cli.add_command(get_game_scores)
+cli.add_command(get_ncaa_rankings)
+cli.add_command(sync_games)
 
 if __name__ == '__main__':
     cli()
+
